@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pre-Order &amp; Smart Pickup — StadiumIQ</title>
+  <meta name="description" content="Order food from your seat, choose a time-slot pickup, and skip the queue entirely. App suggests the least-crowded stall near you." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .fph { padding: 8rem 0 3.5rem; background: linear-gradient(to bottom, #050817, #0a0f2e); text-align: center; position: relative; overflow: hidden; }
+    .fph::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 700px; height: 350px; background: radial-gradient(ellipse, rgba(34,197,94,0.1) 0%, transparent 70%); pointer-events: none; }
+    .fph-badge { display:inline-flex;align-items:center;gap:.5rem;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:999px;padding:.35rem 1rem;color:rgba(74,222,128,.9);font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.25rem; }
+    .fph-icon { font-size:3.5rem;margin-bottom:.75rem;display:block;line-height:1; }
+    .fph-title { font-size:clamp(2.2rem,5vw,3.75rem);font-weight:900;color:white;line-height:1.1;margin-bottom:.75rem; }
+    .fph-desc { color:rgba(255,255,255,.6);font-size:1.05rem;max-width:580px;margin:0 auto 1.75rem;line-height:1.65; }
+    .fph-chips { display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem; }
+    .back-home { display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:999px;color:rgba(255,255,255,.6);text-decoration:none;font-size:.82rem;font-weight:500;transition:all .2s;margin-bottom:2.5rem; }
+    .back-home:hover { background:rgba(255,255,255,.1);color:white; }
+
+    .food-demo-section { padding: 5rem 0; background: #070d1f; }
+    .food-layout { display: grid; grid-template-columns: 1fr 260px; gap: 3rem; align-items: start; }
+    .food-info h2 { font-size: 2rem; font-weight: 800; color: white; margin-bottom: 1rem; }
+    .food-info p { color: rgba(255,255,255,.6); line-height: 1.7; margin-bottom: 1.5rem; }
+
+    .food-features { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+    .food-feat { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 1.1rem; }
+    .food-feat-icon { font-size: 1.5rem; margin-bottom: .5rem; }
+    .food-feat h5 { color: white; font-weight: 600; margin-bottom: .25rem; font-size: .9rem; }
+    .food-feat p { color: rgba(255,255,255,.45); font-size: .8rem; line-height: 1.5; margin: 0; }
+
+    .menu-section { padding: 4rem 0; background: #050817; }
+    .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.25rem; margin-top: 2rem; }
+    .menu-item { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 1.25rem; transition: all .3s; cursor: pointer; }
+    .menu-item:hover { background: rgba(255,255,255,.08); border-color: rgba(34,197,94,.3); transform: translateY(-2px); }
+    .menu-item-emoji { font-size: 2.5rem; display: block; margin-bottom: .75rem; }
+    .menu-item h5 { color: white; font-weight: 700; margin-bottom: .25rem; }
+    .menu-item .price { color: rgba(34,197,94,.9); font-weight: 700; font-size: .9rem; }
+    .menu-item .wait { color: rgba(255,255,255,.4); font-size: .78rem; margin-top: .25rem; }
+    .menu-item .add-btn { margin-top: .75rem; width: 100%; padding: .5rem; background: rgba(34,197,94,.15); border: 1px solid rgba(34,197,94,.3); border-radius: 8px; color: rgba(74,222,128,.9); font-family: 'Outfit',sans-serif; font-weight: 600; font-size: .82rem; cursor: pointer; transition: all .2s; }
+    .menu-item .add-btn:hover { background: rgba(34,197,94,.25); }
+    .menu-item .add-btn.added { background: rgba(34,197,94,.25); color: #4ade80; }
+
+    @media (max-width: 768px) {
+      .food-layout { grid-template-columns: 1fr; }
+      .food-features { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:.45rem;color:inherit">
+        <span class="logo-icon">⚡</span><span class="logo-text">StadiumIQ</span>
+      </a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="navigation.html">Navigation</a></li>
+      <li><a href="heatmap.html">Heatmap</a></li>
+      <li><a href="food.html" style="color:#06b6d4">Food</a></li>
+      <li><a href="emergency.html">Emergency</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="medical.html">Medical</a></li>
+      <li><a href="safety-map.html">Safety Map</a></li>
+    </ul>
+    <a href="auth.html" class="nav-cta">Sign In</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="fph">
+    <div class="container">
+      <a href="index.html" class="back-home">← Back to Home</a>
+      <div class="fph-badge">03 · Smart Ordering</div>
+      <span class="fph-icon">🍔</span>
+      <h1 class="fph-title">Order from<br /><span class="gtext">Your Seat.</span></h1>
+      <p class="fph-desc">Pre-order from your seat, choose a time-slot pickup, and skip the queue entirely. The app suggests the least-crowded stall near you for the fastest experience.</p>
+      <div class="fph-chips">
+        <span class="chip">🍔 Seat-side ordering</span>
+        <span class="chip">⏰ Time-slot pickup</span>
+        <span class="chip">💡 Smart stall suggestions</span>
+        <span class="chip">🔥 Live prep tracking</span>
+        <span class="chip">🛒 Zero queue</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO SECTION -->
+  <section class="food-demo-section">
+    <div class="container">
+      <div class="food-layout">
+        <div class="food-info">
+          <h2>Skip the Queue — Forever</h2>
+          <p>No more missing the action to stand in food lines. StadiumIQ lets you browse the full menu, order from your seat, and pick up at the exact moment your food is ready — guided to the stall with zero wait.</p>
+          <p>AI suggestions steer you toward the least-busy stall near your seat, so you're in and out in under 2 minutes.</p>
+          <div class="food-features">
+            <div class="food-feat"><div class="food-feat-icon">🪑</div><h5>Order from Seat</h5><p>Full menu browsable from any seat in the stadium</p></div>
+            <div class="food-feat"><div class="food-feat-icon">⏰</div><h5>Time-Slot Pickup</h5><p>Choose your pickup window — food is ready exactly then</p></div>
+            <div class="food-feat"><div class="food-feat-icon">📍</div><h5>Nearest Stall</h5><p>AI picks the fastest stall based on queue + walking distance</p></div>
+            <div class="food-feat"><div class="food-feat-icon">🔥</div><h5>Live Prep Tracking</h5><p>Track your order status from "In prep" to "Ready for pickup"</p></div>
+          </div>
+        </div>
+
+        <!-- Phone mockup -->
+        <div style="display:flex;justify-content:center">
+          <div style="width:220px">
+            <div class="phone-frame" style="border-radius:30px">
+              <div class="phone-screen food-screen" style="border-radius:24px">
+                <div class="s-hdr"><div class="back">‹</div><span>Order Food</span><div class="cart">🛒</div></div>
+                <div class="food-list">
+                  <div class="fi"><span class="fe">🍕</span><div class="finfo"><strong>Pizza Slice</strong><small>Pickup 18:45 · Stall 4</small></div><button class="fab">+</button></div>
+                  <div class="fi"><span class="fe">🍟</span><div class="finfo"><strong>Fries Large</strong><small>Pickup 18:45 · Stall 2</small></div><button class="fab">+</button></div>
+                  <div class="fi fi-done"><span class="fe">🥤</span><div class="finfo"><strong>Cola 500ml</strong><small>✓ Added to order</small></div><button class="fab done">✓</button></div>
+                  <div class="fi"><span class="fe">🌮</span><div class="finfo"><strong>Taco Combo</strong><small>Pickup 19:00 · Stall 7</small></div><button class="fab">+</button></div>
+                  <div class="stall-tip">💡 Stall 6 near you — zero queue!</div>
+                </div>
+                <div class="order-bar"><div class="oi">1 item · <strong>₹180</strong></div><button class="checkout">Checkout</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU PREVIEW -->
+  <section class="menu-section">
+    <div class="container">
+      <div class="sec-hd">
+        <span class="stag">Menu Preview</span>
+        <h2>Fan Favourites <span class="gtext">at the Stadium</span></h2>
+        <p>Sample menu — try adding items to your cart below (UI demo).</p>
+      </div>
+      <div class="menu-grid" id="menuGrid">
+        <div class="menu-item"><span class="menu-item-emoji">🍕</span><h5>Pizza Slice</h5><div class="price">₹120</div><div class="wait">Stall 4 · 3 min wait</div><button class="add-btn" onclick="addToCart(this,'Pizza Slice')">Add to Cart</button></div>
+        <div class="menu-item"><span class="menu-item-emoji">🍟</span><h5>Fries Large</h5><div class="price">₹80</div><div class="wait">Stall 2 · 1 min wait</div><button class="add-btn" onclick="addToCart(this,'Fries Large')">Add to Cart</button></div>
+        <div class="menu-item"><span class="menu-item-emoji">🥤</span><h5>Cola 500ml</h5><div class="price">₹60</div><div class="wait">Stall 6 · 0 min wait 💡</div><button class="add-btn" onclick="addToCart(this,'Cola')">Add to Cart</button></div>
+        <div class="menu-item"><span class="menu-item-emoji">🌮</span><h5>Taco Combo</h5><div class="price">₹150</div><div class="wait">Stall 7 · 5 min wait</div><button class="add-btn" onclick="addToCart(this,'Taco Combo')">Add to Cart</button></div>
+        <div class="menu-item"><span class="menu-item-emoji">🍔</span><h5>Burger Meal</h5><div class="price">₹180</div><div class="wait">Stall 3 · 4 min wait</div><button class="add-btn" onclick="addToCart(this,'Burger')">Add to Cart</button></div>
+        <div class="menu-item"><span class="menu-item-emoji">🧃</span><h5>Fresh Juice</h5><div class="price">₹90</div><div class="wait">Stall 1 · 2 min wait</div><button class="add-btn" onclick="addToCart(this,'Juice')">Add to Cart</button></div>
+        <div class="menu-item"><span class="menu-item-emoji">🍦</span><h5>Ice Cream</h5><div class="price">₹70</div><div class="wait">Stall 5 · 1 min wait</div><button class="add-btn" onclick="addToCart(this,'Ice Cream')">Add to Cart</button></div>
+        <div class="menu-item"><span class="menu-item-emoji">☕</span><h5>Hot Coffee</h5><div class="price">₹65</div><div class="wait">Stall 8 · 0 min wait 💡</div><button class="add-btn" onclick="addToCart(this,'Coffee')">Add to Cart</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="container footer-in">
+      <div class="fb">
+        <div class="flogo">⚡ StadiumIQ</div>
+        <p>Smart Stadium Experience System — Hackathon 2025</p>
+        <div class="fbadges"><span class="fb2">🏆 Smart Cities</span><span class="fb2">🤖 AI/ML</span><span class="fb2">🏥 Medical</span><span class="fb2">📡 IoT</span></div>
+      </div>
+      <div class="fnav">
+        <div class="fn"><strong>Features</strong><a href="navigation.html">Navigation</a><a href="heatmap.html">Heatmap</a><a href="food.html">Food Order</a><a href="emergency.html">Emergency</a></div>
+        <div class="fn"><strong>Safety</strong><a href="security.html">Security</a><a href="medical.html">Medical</a><a href="safety-map.html">Safety Map</a></div>
+        <div class="fn"><strong>Account</strong><a href="auth.html">Sign In</a><a href="auth.html?mode=signup">Sign Up</a><a href="index.html">← Home</a></div>
+      </div>
+    </div>
+    <div class="fbot">Built with ❤️ for the Hackathon · StadiumIQ © 2025</div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    let cart = [];
+    function addToCart(btn, item) {
+      cart.push(item);
+      btn.textContent = '✓ Added!';
+      btn.classList.add('added');
+      btn.disabled = true;
+    }
+  </script>
+</body>
+</html>

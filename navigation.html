@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Navigation — StadiumIQ</title>
+  <meta name="description" content="Google Maps for stadiums — indoor GPS using BLE beacons, turn-by-turn directions, and crowd-aware routing." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .fph { padding: 8rem 0 3.5rem; background: linear-gradient(to bottom, #050817, #0a0f2e); text-align: center; position: relative; overflow: hidden; }
+    .fph::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 700px; height: 350px; background: radial-gradient(ellipse, rgba(59,130,246,0.12) 0%, transparent 70%); pointer-events: none; }
+    .fph-badge { display:inline-flex;align-items:center;gap:.5rem;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);border-radius:999px;padding:.35rem 1rem;color:rgba(99,149,255,.9);font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.25rem; }
+    .fph-icon { font-size:3.5rem;margin-bottom:.75rem;display:block;line-height:1; }
+    .fph-title { font-size:clamp(2.2rem,5vw,3.75rem);font-weight:900;color:white;line-height:1.1;margin-bottom:.75rem; }
+    .fph-desc { color:rgba(255,255,255,.6);font-size:1.05rem;max-width:580px;margin:0 auto 1.75rem;line-height:1.65; }
+    .fph-chips { display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem; }
+    .back-home { display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:999px;color:rgba(255,255,255,.6);text-decoration:none;font-size:.82rem;font-weight:500;transition:all .2s;margin-bottom:2.5rem; }
+    .back-home:hover { background:rgba(255,255,255,.1);color:white; }
+
+    /* Extended navigation content styles */
+    .nav-demo-section { padding: 5rem 0; background: #070d1f; }
+    .nav-demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    .nav-demo-info h2 { font-size: 2rem; font-weight: 800; color: white; margin-bottom: 1rem; }
+    .nav-demo-info p { color: rgba(255,255,255,.6); line-height: 1.7; margin-bottom: 1.5rem; }
+
+    .nav-step-list { display: flex; flex-direction: column; gap: 1rem; }
+    .nav-step { display: flex; gap: 1rem; align-items: flex-start; }
+    .nav-step-num { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg,#6366f1,#06b6d4); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .85rem; color: white; flex-shrink: 0; }
+    .nav-step-body strong { display: block; color: white; font-weight: 600; margin-bottom: .25rem; }
+    .nav-step-body span { color: rgba(255,255,255,.5); font-size: .875rem; }
+
+    .nav-phone-demo { display: flex; justify-content: center; }
+    .phone-wrap-solo { width: 240px; }
+    .phone-frame-solo { background: #0d1117; border: 2px solid rgba(255,255,255,.1); border-radius: 32px; padding: 16px 10px; box-shadow: 0 0 60px rgba(99,102,241,.2); }
+    .phone-screen-solo { background: #0a0f1e; border-radius: 22px; overflow: hidden; aspect-ratio: 9/18; position: relative; }
+
+    .stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 4rem; }
+    .stat-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 1.5rem; text-align: center; }
+    .stat-card .sn { font-size: 2rem; font-weight: 900; color: white; display: block; }
+    .stat-card .sn.blue { background: linear-gradient(135deg,#6366f1,#06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-card span:last-child { color: rgba(255,255,255,.5); font-size: .85rem; }
+
+    .tech-section { padding: 4rem 0; background: #050817; }
+    .tech-cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+    .tech-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 1.5rem; transition: all .3s; }
+    .tech-card:hover { background: rgba(255,255,255,.07); border-color: rgba(99,102,241,.3); transform: translateY(-3px); }
+    .tech-card-icon { font-size: 2rem; margin-bottom: .75rem; }
+    .tech-card h4 { color: white; font-weight: 700; margin-bottom: .4rem; }
+    .tech-card p { color: rgba(255,255,255,.5); font-size: .85rem; line-height: 1.6; }
+
+    @media (max-width: 768px) {
+      .nav-demo-grid { grid-template-columns: 1fr; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:.45rem;color:inherit">
+        <span class="logo-icon">⚡</span><span class="logo-text">StadiumIQ</span>
+      </a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="navigation.html" style="color:#06b6d4">Navigation</a></li>
+      <li><a href="heatmap.html">Heatmap</a></li>
+      <li><a href="food.html">Food</a></li>
+      <li><a href="emergency.html">Emergency</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="medical.html">Medical</a></li>
+      <li><a href="safety-map.html">Safety Map</a></li>
+    </ul>
+    <a href="auth.html" class="nav-cta">Sign In</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="fph">
+    <div class="container">
+      <a href="index.html" class="back-home">← Back to Home</a>
+      <div class="fph-badge">01 · Smart Navigation</div>
+      <span class="fph-icon">📍</span>
+      <h1 class="fph-title">Never Get Lost<br /><span class="gtext">Inside Again.</span></h1>
+      <p class="fph-desc">Google Maps for stadiums — indoor GPS using BLE beacons with sub-2m accuracy. Turn-by-turn directions to your seat, washroom, food stall, or exit — routing around crowded zones.</p>
+      <div class="fph-chips">
+        <span class="chip">📍 Turn-by-turn nav</span>
+        <span class="chip">🔵 BLE Beacons</span>
+        <span class="chip">📡 WiFi Triangulation</span>
+        <span class="chip">♿ Accessibility Paths</span>
+        <span class="chip">🚦 Least-crowded routes</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO SECTION -->
+  <section class="nav-demo-section">
+    <div class="container">
+      <div class="nav-demo-grid">
+        <div class="nav-demo-info">
+          <h2>How Navigation Works</h2>
+          <p>StadiumIQ uses a fusion of BLE beacon triangulation and WiFi positioning to pinpoint your location with sub-2m accuracy — even deep inside a concrete stadium where GPS fails.</p>
+          <div class="nav-step-list">
+            <div class="nav-step">
+              <div class="nav-step-num">1</div>
+              <div class="nav-step-body">
+                <strong>You open the map</strong>
+                <span>App detects your position within 2 seconds from nearby BLE beacons</span>
+              </div>
+            </div>
+            <div class="nav-step">
+              <div class="nav-step-num">2</div>
+              <div class="nav-step-body">
+                <strong>Select your destination</strong>
+                <span>Choose from seat, food stall, washroom, exit, or first-aid post</span>
+              </div>
+            </div>
+            <div class="nav-step">
+              <div class="nav-step-num">3</div>
+              <div class="nav-step-body">
+                <strong>AI plans the best route</strong>
+                <span>A* pathfinding algorithm avoids live crowd hot-spots from heatmap data</span>
+              </div>
+            </div>
+            <div class="nav-step">
+              <div class="nav-step-num">4</div>
+              <div class="nav-step-body">
+                <strong>Follow turn-by-turn</strong>
+                <span>Visual arrows and haptic feedback guide you in real time</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone mockup showing navigation -->
+        <div class="nav-phone-demo">
+          <div class="phone-wrap-solo">
+            <div class="phone-frame-solo">
+              <div class="phone-screen-solo">
+                <div class="phone-screen nav-screen" style="border-radius:22px;height:100%">
+                  <div class="s-hdr"><div class="back">‹</div><span>Navigation</span><div class="more">⋮</div></div>
+                  <div class="nav-map" style="flex:1">
+                    <div class="mg">
+                      <div class="mz crowded" style="top:10%;left:8%;width:32%;height:24%">Zone A</div>
+                      <div class="mz moderate" style="top:10%;left:50%;width:34%;height:20%">Zone B</div>
+                      <div class="mz free" style="top:42%;left:18%;width:26%;height:30%">Zone C</div>
+                      <div class="mz moderate" style="top:48%;left:54%;width:30%;height:26%">Zone D</div>
+                      <div class="route-svg"></div>
+                      <div class="udot"></div>
+                      <div class="ddot"></div>
+                    </div>
+                  </div>
+                  <div class="nav-bar">
+                    <div><div class="nav-eta">4 min</div><div class="nav-to">to Seat 47B · Row 12</div></div>
+                    <div class="rtag grn">Optimal Route</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stat-row">
+        <div class="stat-card"><span class="sn blue">&lt;2m</span><span>Location accuracy</span></div>
+        <div class="stat-card"><span class="sn blue">2s</span><span>Position fix time</span></div>
+        <div class="stat-card"><span class="sn blue">100%</span><span>Indoor coverage</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECHNOLOGY SECTION -->
+  <section class="tech-section">
+    <div class="container">
+      <div class="sec-hd">
+        <span class="stag">Technology Stack</span>
+        <h2>Powered by <span class="gtext">Cutting-Edge Tech</span></h2>
+        <p>A multi-layer positioning system that works even without internet connectivity.</p>
+      </div>
+      <div class="tech-cards">
+        <div class="tech-card"><div class="tech-card-icon">🔵</div><h4>BLE Beacons</h4><p>Bluetooth Low Energy beacons placed every 10m provide precise X/Y positioning throughout all stadium levels.</p></div>
+        <div class="tech-card"><div class="tech-card-icon">📡</div><h4>WiFi Triangulation</h4><p>Existing stadium WiFi access points are leveraged as a secondary positioning layer for redundancy.</p></div>
+        <div class="tech-card"><div class="tech-card-icon">🗺️</div><h4>Mapbox Indoor</h4><p>Detailed floor-by-floor indoor map with every corridor, gate, stall, and amenity clearly marked.</p></div>
+        <div class="tech-card"><div class="tech-card-icon">🧠</div><h4>A* Pathfinding</h4><p>Dynamic shortest-path algorithm that re-routes in real time based on live crowd density from IoT sensors.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE CARD -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="fcard fc-blue span2" style="max-width:900px;margin:0 auto">
+        <div class="fc-glow blue"></div>
+        <div class="fc-top"><span class="fcn">01</span><span class="fci">📍</span></div>
+        <h3>Smart Navigation</h3>
+        <p>Google Maps for stadiums — indoor GPS using BLE beacons with sub-2m accuracy. Turn-by-turn directions to your seat, washroom, food stall, or exit, auto-routing around crowded zones.</p>
+        <div class="fc-tags">
+          <span class="ftag">Turn-by-turn indoor nav</span>
+          <span class="ftag">Least-crowded routes</span>
+          <span class="ftag">Accessibility paths</span>
+          <span class="ftag">BLE + WiFi triangulation</span>
+        </div>
+        <div class="tech-row">
+          <span class="tc">BLE Beacons</span><span class="tc">WiFi Triangulation</span><span class="tc">Mapbox Indoor</span><span class="tc">A* Pathfinding</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="container footer-in">
+      <div class="fb">
+        <div class="flogo">⚡ StadiumIQ</div>
+        <p>Smart Stadium Experience System — Hackathon 2025</p>
+        <div class="fbadges"><span class="fb2">🏆 Smart Cities</span><span class="fb2">🤖 AI/ML</span><span class="fb2">🏥 Medical</span><span class="fb2">📡 IoT</span></div>
+      </div>
+      <div class="fnav">
+        <div class="fn"><strong>Features</strong><a href="navigation.html">Navigation</a><a href="heatmap.html">Heatmap</a><a href="food.html">Food Order</a><a href="emergency.html">Emergency</a></div>
+        <div class="fn"><strong>Safety</strong><a href="security.html">Security</a><a href="medical.html">Medical</a><a href="safety-map.html">Safety Map</a></div>
+        <div class="fn"><strong>Account</strong><a href="auth.html">Sign In</a><a href="auth.html?mode=signup">Sign Up</a><a href="index.html">← Home</a></div>
+      </div>
+    </div>
+    <div class="fbot">Built with ❤️ for the Hackathon · StadiumIQ © 2025</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

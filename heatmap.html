@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Crowd Heatmap — StadiumIQ</title>
+  <meta name="description" content="Real-time color-coded crowd density overlay on the stadium map — updated every 5 seconds from IoT sensors and CCTV." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .fph { padding: 8rem 0 3.5rem; background: linear-gradient(to bottom, #050817, #0a0f2e); text-align: center; position: relative; overflow: hidden; }
+    .fph::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 700px; height: 350px; background: radial-gradient(ellipse, rgba(139,92,246,0.12) 0%, transparent 70%); pointer-events: none; }
+    .fph-badge { display:inline-flex;align-items:center;gap:.5rem;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);border-radius:999px;padding:.35rem 1rem;color:rgba(167,139,250,.9);font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.25rem; }
+    .fph-icon { font-size:3.5rem;margin-bottom:.75rem;display:block;line-height:1; }
+    .fph-title { font-size:clamp(2.2rem,5vw,3.75rem);font-weight:900;color:white;line-height:1.1;margin-bottom:.75rem; }
+    .fph-desc { color:rgba(255,255,255,.6);font-size:1.05rem;max-width:580px;margin:0 auto 1.75rem;line-height:1.65; }
+    .fph-chips { display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem; }
+    .back-home { display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:999px;color:rgba(255,255,255,.6);text-decoration:none;font-size:.82rem;font-weight:500;transition:all .2s;margin-bottom:2.5rem; }
+    .back-home:hover { background:rgba(255,255,255,.1);color:white; }
+
+    .hm-full-demo { padding: 5rem 0; background: #070d1f; }
+    .hm-use-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .hmu-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 1.75rem; transition: all .3s; }
+    .hmu-card:hover { background: rgba(255,255,255,.07); border-color: rgba(139,92,246,.3); transform: translateY(-3px); }
+    .hmu-card-icon { font-size: 2.25rem; margin-bottom: 1rem; }
+    .hmu-card h4 { color: white; font-weight: 700; margin-bottom: .5rem; }
+    .hmu-card p { color: rgba(255,255,255,.5); font-size: .875rem; line-height: 1.65; }
+
+    .hm-live-ticker { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
+    .hlt { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 1rem 1.25rem; display: flex; align-items: center; gap: .75rem; }
+    .hlt-dot { width: 8px; height: 8px; border-radius: 50%; animation: blink 1.5s ease-in-out infinite; }
+    .hlt-dot.red { background: #ef4444; }
+    .hlt-dot.yellow { background: #f59e0b; }
+    .hlt-dot.green { background: #22c55e; }
+    .hlt strong { color: white; font-size: .875rem; display: block; }
+    .hlt span { color: rgba(255,255,255,.45); font-size: .78rem; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:.45rem;color:inherit">
+        <span class="logo-icon">⚡</span><span class="logo-text">StadiumIQ</span>
+      </a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="navigation.html">Navigation</a></li>
+      <li><a href="heatmap.html" style="color:#06b6d4">Heatmap</a></li>
+      <li><a href="food.html">Food</a></li>
+      <li><a href="emergency.html">Emergency</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="medical.html">Medical</a></li>
+      <li><a href="safety-map.html">Safety Map</a></li>
+    </ul>
+    <a href="auth.html" class="nav-cta">Sign In</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="fph">
+    <div class="container">
+      <a href="index.html" class="back-home">← Back to Home</a>
+      <div class="fph-badge">04 · Most Important Feature</div>
+      <span class="fph-icon">🌡️</span>
+      <h1 class="fph-title">See Every Crowd.<br /><span class="gtext">In Real Time.</span></h1>
+      <p class="fph-desc">Real-time color-coded density overlay on the stadium map — updated every 5 seconds from IoT sensors and CCTV. Fans avoid crowds. Admins control flow.</p>
+      <div class="fph-chips">
+        <span class="chip">🌡️ Live density</span>
+        <span class="chip">📡 IoT Sensors</span>
+        <span class="chip">🎥 CCTV AI</span>
+        <span class="chip">⚡ 5s updates</span>
+        <span class="chip">🗺️ Zone-level granularity</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE SECTION -->
+  <section id="heatmap" class="section section-dark">
+    <div class="container">
+      <div class="fcard fc-special span2" style="max-width:900px;margin:0 auto">
+        <div class="fc-glow purple"></div>
+        <div class="fc-top"><span class="fcn">04</span><span class="fci">🌡️</span></div>
+        <h3>Live Crowd Heatmaps <span class="imp-tag">Most Important</span></h3>
+        <p>Real-time color-coded density overlay on the stadium map — updated every 5 seconds from sensors and CCTV. Fans avoid crowds, admins control flow.</p>
+        <div class="heatmap-demo">
+          <div class="hm-stadium">
+            <div class="hm-field"></div>
+            <div class="hm-zone hz-red"  style="top:4%;left:4%;width:28%;height:22%"><span>N · High</span></div>
+            <div class="hm-zone hz-yellow" style="top:4%;right:4%;width:28%;height:22%"><span>NE · Med</span></div>
+            <div class="hm-zone hz-green" style="top:32%;left:4%;width:22%;height:30%"><span>W · Free</span></div>
+            <div class="hm-zone hz-red"  style="top:32%;right:4%;width:22%;height:30%"><span>E · High</span></div>
+            <div class="hm-zone hz-green" style="bottom:4%;left:18%;width:28%;height:20%"><span>S · Free</span></div>
+            <div class="hm-zone hz-yellow" style="bottom:4%;right:18%;width:22%;height:20%"><span>SE · Med</span></div>
+          </div>
+          <div class="hm-legend-block">
+            <div class="hlb"><span class="hlb-dot red"></span><strong>Red</strong><span>Overcrowded — avoid</span></div>
+            <div class="hlb"><span class="hlb-dot yellow"></span><strong>Yellow</strong><span>Moderate — proceed with care</span></div>
+            <div class="hlb"><span class="hlb-dot green"></span><strong>Green</strong><span>Free — best experience</span></div>
+            <div class="hm-uses">
+              <div class="hmu"><div class="hmu-icon">👤</div><div><strong>Fans</strong><p>Avoid crowds, find free zones</p></div></div>
+              <div class="hmu"><div class="hmu-icon">🛡️</div><div><strong>Admins</strong><p>Control crowd flow, prevent surge</p></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="tech-row">
+          <span class="tc">IoT Sensors</span><span class="tc">CCTV AI</span><span class="tc">WebSockets</span><span class="tc">Canvas Render</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE TICKER & USE CASES -->
+  <section class="hm-full-demo">
+    <div class="container">
+      <div class="sec-hd">
+        <span class="stag">Live Data Feed</span>
+        <h2>Crowd Intelligence <span class="gtext">in Motion</span></h2>
+        <p>Simulated live zone status — in production, this updates from turnstiles, CCTV, and BLE sensors every 5 seconds.</p>
+      </div>
+
+      <div class="hm-live-ticker" id="hmTicker">
+        <div class="hlt"><div class="hlt-dot red"></div><div><strong>North Stand — HIGH</strong><span>Density 94% · Avoid</span></div></div>
+        <div class="hlt"><div class="hlt-dot yellow"></div><div><strong>East Corridor — MOD</strong><span>Density 61% · Caution</span></div></div>
+        <div class="hlt"><div class="hlt-dot green"></div><div><strong>West Stand — LOW</strong><span>Density 22% · Free</span></div></div>
+        <div class="hlt"><div class="hlt-dot red"></div><div><strong>Gate A Queue — HIGH</strong><span>~12 min wait</span></div></div>
+        <div class="hlt"><div class="hlt-dot green"></div><div><strong>Gate C — CLEAR</strong><span>~2 min wait</span></div></div>
+        <div class="hlt"><div class="hlt-dot yellow"></div><div><strong>Food Court B — MOD</strong><span>Density 55%</span></div></div>
+      </div>
+
+      <div class="hm-use-cards">
+        <div class="hmu-card">
+          <div class="hmu-card-icon">👤</div>
+          <h4>For Fans</h4>
+          <p>See where the crowd is before you move. Find less-congested food stalls, washrooms, and corridors in seconds — enjoy the game, skip the chaos.</p>
+        </div>
+        <div class="hmu-card">
+          <div class="hmu-card-icon">🛡️</div>
+          <h4>For Security</h4>
+          <p>Monitor crowd pressure in every zone from a central dashboard. Pre-position staff before surges form. React instantly when density crosses thresholds.</p>
+        </div>
+        <div class="hmu-card">
+          <div class="hmu-card-icon">🏟️</div>
+          <h4>For Operations</h4>
+          <p>Control gate open/close decisions based on real-time flow data. Re-route fan streams to balance capacity across sections and reduce bottlenecks.</p>
+        </div>
+        <div class="hmu-card">
+          <div class="hmu-card-icon">🚨</div>
+          <h4>For Emergencies</h4>
+          <p>During evacuation, the heatmap becomes a live traffic control system — showing which exits are clear and routing fans away from surge zones.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="container footer-in">
+      <div class="fb">
+        <div class="flogo">⚡ StadiumIQ</div>
+        <p>Smart Stadium Experience System — Hackathon 2025</p>
+        <div class="fbadges"><span class="fb2">🏆 Smart Cities</span><span class="fb2">🤖 AI/ML</span><span class="fb2">🏥 Medical</span><span class="fb2">📡 IoT</span></div>
+      </div>
+      <div class="fnav">
+        <div class="fn"><strong>Features</strong><a href="navigation.html">Navigation</a><a href="heatmap.html">Heatmap</a><a href="food.html">Food Order</a><a href="emergency.html">Emergency</a></div>
+        <div class="fn"><strong>Safety</strong><a href="security.html">Security</a><a href="medical.html">Medical</a><a href="safety-map.html">Safety Map</a></div>
+        <div class="fn"><strong>Account</strong><a href="auth.html">Sign In</a><a href="auth.html?mode=signup">Sign Up</a><a href="index.html">← Home</a></div>
+      </div>
+    </div>
+    <div class="fbot">Built with ❤️ for the Hackathon · StadiumIQ © 2025</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

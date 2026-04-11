@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Safety Map — StadiumIQ</title>
+  <meta name="description" content="Live IPL venue fusion map showing gates, medical posts, and crowd density by stand zone — updated like a live operations feed." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .fph { padding: 8rem 0 3.5rem; background: linear-gradient(to bottom, #050817, #0a0f2e); text-align: center; position: relative; overflow: hidden; }
+    .fph::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 700px; height: 350px; background: radial-gradient(ellipse, rgba(6,182,212,0.1) 0%, transparent 70%); pointer-events: none; }
+    .fph-badge { display:inline-flex;align-items:center;gap:.5rem;background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.3);border-radius:999px;padding:.35rem 1rem;color:rgba(6,182,212,.9);font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.25rem; }
+    .fph-icon { font-size:3.5rem;margin-bottom:.75rem;display:block;line-height:1; }
+    .fph-title { font-size:clamp(2.2rem,5vw,3.75rem);font-weight:900;color:white;line-height:1.1;margin-bottom:.75rem; }
+    .fph-desc { color:rgba(255,255,255,.6);font-size:1.05rem;max-width:580px;margin:0 auto 1.75rem;line-height:1.65; }
+    .fph-chips { display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem; }
+    .back-home { display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:999px;color:rgba(255,255,255,.6);text-decoration:none;font-size:.82rem;font-weight:500;transition:all .2s;margin-bottom:2.5rem; }
+    .back-home:hover { background:rgba(255,255,255,.1);color:white; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:.45rem;color:inherit">
+        <span class="logo-icon">⚡</span><span class="logo-text">StadiumIQ</span>
+      </a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="navigation.html">Navigation</a></li>
+      <li><a href="heatmap.html">Heatmap</a></li>
+      <li><a href="food.html">Food</a></li>
+      <li><a href="emergency.html">Emergency</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="medical.html">Medical</a></li>
+      <li><a href="safety-map.html" style="color:#06b6d4">Safety Map</a></li>
+    </ul>
+    <a href="auth.html" class="nav-cta">Sign In</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="fph">
+    <div class="container">
+      <a href="index.html" class="back-home">← Back to Home</a>
+      <div class="fph-badge">🗺️ Live Venue Fusion</div>
+      <span class="fph-icon">🗺️</span>
+      <h1 class="fph-title">Smart Safety<br /><span class="gtext">Map</span></h1>
+      <p class="fph-desc">Pick an IPL host venue in India. The map shows gates, on-site medical posts, and crowd density by stand zone — updated like a live operations feed.</p>
+      <div class="fph-chips">
+        <span class="chip">🏟️ IPL Venues</span>
+        <span class="chip">◆ Gate Positions</span>
+        <span class="chip">✚ Medical Posts</span>
+        <span class="chip">🌡️ Crowd Density</span>
+        <span class="chip">⚡ Live Simulation</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SMART SAFETY MAP -->
+  <section id="smart-safety-map" class="section section-dark">
+    <div class="container">
+      <div class="sec-hd ssm-head-block ssm-animate" data-delay="0">
+        <span class="stag">🗺️ Live venue fusion</span>
+        <h2>Smart Safety <span class="gtext">Map</span></h2>
+        <p>
+          Pick an IPL host venue in India. The map shows <strong>gates</strong>, on-site <strong>medical posts</strong>,
+          and <strong>crowd density</strong> by stand zone — updated like a live operations feed (demo simulation).
+        </p>
+      </div>
+
+      <div class="ssm-toolbar ssm-animate" data-delay="0">
+        <label class="ssm-label" for="ssm-stadium">Stadium (IPL India)</label>
+        <select id="ssm-stadium" class="ssm-select" aria-label="Select IPL stadium"></select>
+        <div class="ssm-live-badge" title="Demo: simulates CCTV + turnstile fusion">
+          <span class="ldot"></span>
+          <span id="ssm-live-label">Live analysis</span>
+        </div>
+        <p class="ssm-disclaimer">Demo only — densities and queues are simulated. Production would ingest turnstiles, CCTV ML, and BLE counters per venue.</p>
+      </div>
+
+      <div class="ssm-grid">
+        <div class="ssm-map-card ssm-animate" data-delay="60">
+          <div class="ssm-map-hd">
+            <div>
+              <h3 id="ssm-venue-title">Venue</h3>
+              <p id="ssm-venue-meta" class="ssm-meta"></p>
+            </div>
+            <div class="ssm-occupancy">
+              <span class="ssm-oc-label">Est. inside</span>
+              <strong id="ssm-occupancy-val">—</strong>
+            </div>
+          </div>
+          <div class="ssm-svg-wrap">
+            <svg id="ssm-svg" viewBox="0 0 440 380" role="img" aria-labelledby="ssm-svg-title">
+              <title id="ssm-svg-title">Stadium safety map with zones, gates, and medical points</title>
+              <defs>
+                <filter id="ssm-glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2" result="b" />
+                  <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+                </filter>
+              </defs>
+              <g id="ssm-layer-pitch"></g>
+              <g id="ssm-layer-zones"></g>
+              <g id="ssm-layer-medical"></g>
+              <g id="ssm-layer-gates"></g>
+            </svg>
+          </div>
+          <div class="ssm-legend-row">
+            <span><i class="ssm-lg low"></i> Low density</span>
+            <span><i class="ssm-lg med"></i> Moderate</span>
+            <span><i class="ssm-lg high"></i> High / surge</span>
+            <span class="ssm-lg-gate">◆ Gate</span>
+            <span class="ssm-lg-med">✚ Medical</span>
+          </div>
+        </div>
+
+        <aside class="ssm-side ssm-animate" data-delay="120">
+          <div class="ssm-panel">
+            <h4>Zone density <span class="ssm-tick" id="ssm-updated">—</span></h4>
+            <ul class="ssm-zone-list" id="ssm-zone-list"></ul>
+          </div>
+          <div class="ssm-panel">
+            <h4>Gates &amp; queues</h4>
+            <ul class="ssm-gate-list" id="ssm-gate-list"></ul>
+          </div>
+          <div class="ssm-panel ssm-panel-med">
+            <h4>Medical &amp; first aid</h4>
+            <ul class="ssm-med-list" id="ssm-med-list"></ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="container footer-in">
+      <div class="fb">
+        <div class="flogo">⚡ StadiumIQ</div>
+        <p>Smart Stadium Experience System — Hackathon 2025</p>
+        <div class="fbadges"><span class="fb2">🏆 Smart Cities</span><span class="fb2">🤖 AI/ML</span><span class="fb2">🏥 Medical</span><span class="fb2">📡 IoT</span></div>
+      </div>
+      <div class="fnav">
+        <div class="fn"><strong>Features</strong><a href="navigation.html">Navigation</a><a href="heatmap.html">Heatmap</a><a href="food.html">Food Order</a><a href="emergency.html">Emergency</a></div>
+        <div class="fn"><strong>Safety</strong><a href="security.html">Security</a><a href="medical.html">Medical</a><a href="safety-map.html">Safety Map</a></div>
+        <div class="fn"><strong>Account</strong><a href="auth.html">Sign In</a><a href="auth.html?mode=signup">Sign Up</a><a href="index.html">← Home</a></div>
+      </div>
+    </div>
+    <div class="fbot">Built with ❤️ for the Hackathon · StadiumIQ © 2025</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
