@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StadiumIQ — Smart Stadium Experience System</title>
+  <meta name="description" content="AI-powered stadium experience platform — smart navigation, live heatmaps, wait-time prediction, food ordering and emergency routing for every fan." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">StadiumIQ</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="#heatmap">Heatmap</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#demo">Demo</a></li>
+      <li><a href="#medical">Medical</a></li>
+    </ul>
+    <a href="#demo" class="nav-cta">View Demo</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-grid-overlay"></div>
+
+    <!-- floating live heatmap widget -->
+    <div class="hero-widget hw-right">
+      <div class="w-head"><span class="ldot"></span> Live Heatmap</div>
+      <div class="mini-hm" id="heroHeatmap"></div>
+      <div class="w-foot">Gate A · North Stand · Zone 7</div>
+    </div>
+
+    <!-- floating wait widget -->
+    <div class="hero-widget hw-left">
+      <div class="w-head">⏱ Wait Times</div>
+      <div class="wait-rows">
+        <div class="wr"><span>Gate 3</span><span class="wt red">12 min</span></div>
+        <div class="wr"><span>Gate 5</span><span class="wt green">3 min</span></div>
+        <div class="wr"><span>Food Court A</span><span class="wt yellow">7 min</span></div>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge"><span class="ldot"></span> HACKATHON 2025 · SMART CITIES TRACK</div>
+      <h1 class="hero-title">One App.<br /><span class="gtext">Every Experience.</span></h1>
+      <p class="hero-sub">
+        AI-powered smart stadium system that eliminates chaos —
+        real-time navigation, crowd intelligence, instant food ordering,
+        and emergency routing all in one seamless platform.
+      </p>
+      <div class="hero-chips">
+        <span class="chip">📍 Indoor Navigation</span>
+        <span class="chip">🌡️ Live Heatmaps</span>
+        <span class="chip">⏱ Wait Prediction</span>
+        <span class="chip">🍔 Smart Ordering</span>
+        <span class="chip">🚨 Emergency Routing</span>
+      </div>
+      <div class="hero-cta">
+        <a href="#features" class="btn-p">Explore Features <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="#demo" class="btn-s">▶ View Demo</a>
+      </div>
+    </div>
+
+    <div class="scroll-hint"><div class="sw"></div><span>Scroll to explore</span></div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="section">
+    <div class="container">
+      <div class="sec-hd">
+        <span class="stag">Key Features</span>
+        <h2>Everything a Fan Needs,<br /><span class="gtext">Perfectly Intelligent</span></h2>
+        <p>7 powerful systems working together to transform every moment inside the stadium.</p>
+      </div>
+
+      <div class="feat-grid">
+
+        <!-- F1 Navigation -->
+        <div class="fcard fc-blue span2" data-delay="0">
+          <div class="fc-glow blue"></div>
+          <div class="fc-top"><span class="fcn">01</span><span class="fci">📍</span></div>
+          <h3>Smart Navigation</h3>
+          <p>Google Maps for stadiums — indoor GPS using BLE beacons with sub-2m accuracy. Turn-by-turn directions to your seat, washroom, food stall, or exit, auto-routing around crowded zones.</p>
+          <div class="fc-tags">
+            <span class="ftag">Turn-by-turn indoor nav</span>
+            <span class="ftag">Least-crowded routes</span>
+            <span class="ftag">Accessibility paths</span>
+            <span class="ftag">BLE + WiFi triangulation</span>
+          </div>
+          <div class="tech-row">
+            <span class="tc">BLE Beacons</span><span class="tc">WiFi Triangulation</span><span class="tc">Mapbox Indoor</span><span class="tc">A* Pathfinding</span>
+          </div>
+        </div>
+
+        <!-- F2 Wait Times -->
+        <div class="fcard" data-delay="0">
+          <div class="fc-glow cyan"></div>
+          <div class="fc-top"><span class="fcn">02</span><span class="fci">⏱️</span></div>
+          <h3>Live Wait-Time Prediction</h3>
+          <p>AI estimates queue lengths at every gate, food stall, and washroom — updated every 30 seconds from computer vision on CCTV feeds.</p>
+          <div class="wait-bars">
+            <div class="wbar-row"><span>Gate 3</span><div class="wbar"><div class="wbfill" style="--w:75%;--c:#ef4444"></div></div><span class="wval red">12m</span></div>
+            <div class="wbar-row"><span>Gate 5</span><div class="wbar"><div class="wbfill" style="--w:20%;--c:#22c55e"></div></div><span class="wval green">3m</span></div>
+            <div class="wbar-row"><span>Food A</span><div class="wbar"><div class="wbfill" style="--w:45%;--c:#f59e0b"></div></div><span class="wval yellow">7m</span></div>
+          </div>
+          <div class="tech-row">
+            <span class="tc">CCTV AI</span><span class="tc">Computer Vision</span><span class="tc">ML Models</span>
+          </div>
+        </div>
+
+        <!-- F3 Food -->
+        <div class="fcard" data-delay="100">
+          <div class="fc-glow green"></div>
+          <div class="fc-top"><span class="fcn">03</span><span class="fci">🍔</span></div>
+          <h3>Pre-Order & Smart Pickup</h3>
+          <p>Order from your seat, choose a pickup slot, and skip the queue entirely. App suggests the least-crowded stall near you.</p>
+          <ul class="fc-list">
+            <li>Order from any stall in-app</li>
+            <li>Time-slot pickup scheduling</li>
+            <li>Least-crowded stall suggestions</li>
+            <li>Live preparation tracking</li>
+          </ul>
+          <div class="tech-row">
+            <span class="tc">Firebase RT</span><span class="tc">Node.js</span><span class="tc">Slot Scheduler</span>
+          </div>
+        </div>
+
+        <!-- F4 Heatmaps -->
+        <div class="fcard fc-special span2" data-delay="0" id="heatmap">
+          <div class="fc-glow purple"></div>
+          <div class="fc-top"><span class="fcn">04</span><span class="fci">🌡️</span></div>
+          <h3>Live Crowd Heatmaps <span class="imp-tag">Most Important</span></h3>
+          <p>Real-time color-coded density overlay on the stadium map — updated every 5 seconds from sensors and CCTV. Fans avoid crowds, admins control flow.</p>
+          <div class="heatmap-demo">
+            <div class="hm-stadium">
+              <div class="hm-field"></div>
+              <div class="hm-zone hz-red"  style="top:4%;left:4%;width:28%;height:22%"><span>N · High</span></div>
+              <div class="hm-zone hz-yellow" style="top:4%;right:4%;width:28%;height:22%"><span>NE · Med</span></div>
+              <div class="hm-zone hz-green" style="top:32%;left:4%;width:22%;height:30%"><span>W · Free</span></div>
+              <div class="hm-zone hz-red"  style="top:32%;right:4%;width:22%;height:30%"><span>E · High</span></div>
+              <div class="hm-zone hz-green" style="bottom:4%;left:18%;width:28%;height:20%"><span>S · Free</span></div>
+              <div class="hm-zone hz-yellow" style="bottom:4%;right:18%;width:22%;height:20%"><span>SE · Med</span></div>
+            </div>
+            <div class="hm-legend-block">
+              <div class="hlb"><span class="hlb-dot red"></span><strong>Red</strong><span>Overcrowded — avoid</span></div>
+              <div class="hlb"><span class="hlb-dot yellow"></span><strong>Yellow</strong><span>Moderate — proceed with care</span></div>
+              <div class="hlb"><span class="hlb-dot green"></span><strong>Green</strong><span>Free — best experience</span></div>
+              <div class="hm-uses">
+                <div class="hmu"><div class="hmu-icon">👤</div><div><strong>Fans</strong><p>Avoid crowds, find free zones</p></div></div>
+                <div class="hmu"><div class="hmu-icon">🛡️</div><div><strong>Admins</strong><p>Control crowd flow, prevent surge</p></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="tech-row">
+            <span class="tc">IoT Sensors</span><span class="tc">CCTV AI</span><span class="tc">WebSockets</span><span class="tc">Canvas Render</span>
+          </div>
+        </div>
+
+        <!-- F5 Emergency -->
+        <div class="fcard fc-red" data-delay="0">
+          <div class="fc-glow red"></div>
+          <div class="fc-top"><span class="fcn">05</span><span class="fci">🚨</span></div>
+          <h3>Emergency Smart Routing</h3>
+          <p>In any emergency — fire, stampede, or medical — the system instantly notifies every user and computes the safest, least-congested evacuation path.</p>
+          <ul class="fc-list">
+            <li>Mass push alerts with vibration</li>
+            <li>Dynamic evacuation re-routing</li>
+            <li>Nearest safe exit guidance</li>
+            <li>Synced with stadium security</li>
+          </ul>
+          <span class="ftag red">Critical Safety</span>
+        </div>
+
+        <!-- F6 Smart Entry -->
+        <div class="fcard" data-delay="100">
+          <div class="fc-glow blue"></div>
+          <div class="fc-top"><span class="fcn">06</span><span class="fci">🎟️</span></div>
+          <h3>Smart Entry System</h3>
+          <p>QR + optional face recognition for 2-second entry. AI predicts crowd arrival waves and dynamically opens or redirects gates before surges hit.</p>
+          <ul class="fc-list">
+            <li>QR + face recognition (optional)</li>
+            <li>2-second scan & entry</li>
+            <li>Crowd surge pre-prediction</li>
+            <li>Dynamic gate open/close control</li>
+          </ul>
+          <div class="tech-row">
+            <span class="tc">OpenCV</span><span class="tc">LSTM Models</span><span class="tc">Gate IoT</span>
+          </div>
+        </div>
+
+        <!-- F7 Personalized Notifs -->
+        <div class="fcard span2" data-delay="0">
+          <div class="fc-glow purple"></div>
+          <div class="fc-top"><span class="fcn">07</span><span class="fci">📢</span></div>
+          <h3>Personalized Notifications</h3>
+          <p>Context-aware alerts based on your real-time location, seat, and preferences — nudging you to the best gate, stall, or route at exactly the right moment.</p>
+          <div class="notif-examples">
+            <div class="ne"><span class="ne-icon">🚪</span><span>"Your gate is crowded — switch to Gate 2 for 3 min entry"</span></div>
+            <div class="ne"><span class="ne-icon">🍟</span><span>"Stall B near you has zero queue right now!"</span></div>
+            <div class="ne"><span class="ne-icon">⚽</span><span>"Match starts in 8 min — head to your seat via Route C"</span></div>
+            <div class="ne"><span class="ne-icon">🚽</span><span>"Washroom on Level 2 is free — Level 3 has 9 min wait"</span></div>
+          </div>
+          <div class="tech-row">
+            <span class="tc">FCM Push</span><span class="tc">Location API</span><span class="tc">Recommendation Engine</span><span class="tc">Real-time Rules</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECURITY SECTION -->
+  <section id="security" class="section section-dark">
+    <div class="container">
+      <div class="sec-hd">
+        <span class="stag sec-stag">🛡️ Safety &amp; Security</span>
+        <h2>Every Fan. <span class="gtext">Always Protected.</span></h2>
+        <p>7 integrated safety tools that detect and resolve incidents before they escalate — seamlessly woven into the fan experience.</p>
+      </div>
+
+      <!-- Tab bar -->
+      <div class="sec-tabs" role="tablist">
+        <button class="sec-tab active" data-tab="0">📲 Report</button>
+        <button class="sec-tab" data-tab="1">🧠 AI Detect</button>
+        <button class="sec-tab" data-tab="2">📍 Dispatch</button>
+        <button class="sec-tab" data-tab="3">🪑 Seat</button>
+        <button class="sec-tab" data-tab="4">🔔 Prevent</button>
+        <button class="sec-tab" data-tab="5">🧭 Safe Zone</button>
+        <button class="sec-tab" data-tab="6">👥 Anon</button>
+      </div>
+
+      <!-- Tab panels -->
+      <div class="sec-panels">
+
+        <!-- Panel 0: Incident Reporting -->
+        <div class="sec-panel active" data-panel="0">
+          <div class="sp-layout">
+            <div class="sp-info">
+              <div class="sp-badge red">01 · Critical Feature</div>
+              <h3>📲 Instant Incident Reporting</h3>
+              <p>Any fan can report an issue in under 5 seconds — directly from the app. One tap selects the incident type, and the system auto-attaches their live location before sending.</p>
+              <div class="sp-points">
+                <div class="spp"><div class="spp-dot blue"></div><div><strong>Multiple Issue Types</strong><p>Fight, Seat Dispute, Harassment, Medical Emergency — each with dedicated flow</p></div></div>
+                <div class="spp"><div class="spp-dot green"></div><div><strong>Live Location Attached</strong><p>GPS coordinates auto-sent so staff can navigate directly to the fan</p></div></div>
+                <div class="spp"><div class="spp-dot purple"></div><div><strong>Photo / Video Evidence</strong><p>Optional media capture for better incident documentation</p></div></div>
+                <div class="spp"><div class="spp-dot yellow"></div><div><strong>Anonymous Mode</strong><p>Identity hidden before transmission — encourages more participation</p></div></div>
+              </div>
+              <div class="sp-tech">
+                <span class="tc">Firebase RT</span><span class="tc">GPS API</span><span class="tc">E2E Encrypt</span>
+              </div>
+            </div>
+            <div class="sp-visual">
+              <div class="spv-phone">
+                <div class="spvp-hdr"><div class="back">‹</div><span>Report Issue</span><div class="anon-pill">Anon</div></div>
+                <div class="spvp-loc"><span class="spvp-dot"></span> Zone E4 · Seat 22 · Live</div>
+                <div class="spvp-opts">
+                  <div class="sopt r">⚔️ Fight / Aggression</div>
+                  <div class="sopt y">🪑 Seat Dispute</div>
+                  <div class="sopt o">🚨 Harassment</div>
+                  <div class="sopt b">🏥 Medical Emergency</div>
+                </div>
+                <div class="spvp-media">
+                  <div class="spm">📸 Add Photo</div>
+                  <div class="spm">🎥 Add Video</div>
+                </div>
+                <div class="spvp-submit">🆘 Send Report Now</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 1: AI Detection -->
+        <div class="sec-panel" data-panel="1">
+          <div class="sp-layout">
+            <div class="sp-info">
+              <div class="sp-badge yellow">02 · AI / ML Core</div>
+              <h3>🧠 AI-Based Conflict Detection</h3>
+              <p>Computer vision scans CCTV feeds 24/7, detecting crowd clustering, aggressive body language, and abnormal movement patterns — triggering alerts before incidents escalate.</p>
+              <div class="sp-points">
+                <div class="spp"><div class="spp-dot red"></div><div><strong>Crowd Surge Detection</strong><p>Identifies sudden density spikes in any zone within seconds</p></div></div>
+                <div class="spp"><div class="spp-dot yellow"></div><div><strong>Aggressive Movement ML</strong><p>Trained pose-estimation model flags unusual body language patterns</p></div></div>
+                <div class="spp"><div class="spp-dot blue"></div><div><strong>Zone Reclassification</strong><p>Zones upgrade from Safe → Warning → Critical automatically in real time</p></div></div>
+              </div>
+              <div class="zone-pills">
+                <span class="zpill green">🟢 Zone A · Safe</span>
+                <span class="zpill yellow">🟡 Zone C · Warning</span>
+                <span class="zpill red">🔴 Zone E · Critical</span>
+              </div>
+              <div class="sp-tech"><span class="tc">OpenCV</span><span class="tc">Pose Estimation</span><span class="tc">CCTV AI</span><span class="tc">WebSocket</span></div>
+            </div>
+            <div class="sp-visual">
+              <div class="spv-map">
+                <div class="svm-field"></div>
+                <div class="svm-zone sz-red" style="top:5%;left:5%;width:34%;height:26%">A · Critical</div>
+                <div class="svm-zone sz-yellow" style="top:5%;right:5%;width:30%;height:22%">B · Warning</div>
+                <div class="svm-zone sz-green" style="top:36%;left:5%;width:26%;height:32%">C · Safe</div>
+                <div class="svm-zone sz-green" style="top:38%;right:5%;width:26%;height:28%">D · Safe</div>
+                <div class="svm-zone sz-yellow" style="bottom:5%;left:20%;width:30%;height:22%">E · Warning</div>
+                <div class="svm-alert">🔴 AI Alert: Zone A</div>
+                <div class="svm-staff"></div>
+                <div class="svm-staff s2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Smart Dispatch -->
+        <div class="sec-panel" data-panel="2">
+          <div class="sp-layout">
+            <div class="sp-info">
+              <div class="sp-badge blue">03 · Dispatch Engine</div>
+              <h3>📍 Smart Security Dispatch</h3>
+              <p>When an incident is flagged, the system instantly assigns the nearest available security officer — calculating travel time and optimal path using real-time indoor positioning.</p>
+              <div class="sp-points">
+                <div class="spp"><div class="spp-dot blue"></div><div><strong>Nearest-First Assignment</strong><p>Haversine distance + indoor path cost evaluated in milliseconds</p></div></div>
+                <div class="spp"><div class="spp-dot green"></div><div><strong>Live Status Tracking</strong><p>Pending → Responding → On Scene → Resolved lifecycle visible to admin</p></div></div>
+                <div class="spp"><div class="spp-dot purple"></div><div><strong>Admin Dashboard</strong><p>Control room sees all active incidents, staff positions, and ETA on one screen</p></div></div>
+              </div>
+              <div class="dispatch-board">
+                <div class="db-row"><span class="db-loc">📍 Zone A</span><span class="db-staff">→ Team Alpha</span><span class="db-s r">CRITICAL</span></div>
+                <div class="db-row"><span class="db-loc">📍 Seat C12</span><span class="db-staff">→ Officer Kumar</span><span class="db-s y">RESPONDING</span></div>
+                <div class="db-row"><span class="db-loc">📍 Gate A</span><span class="db-staff">→ Medic Unit 1</span><span class="db-s g">RESOLVED</span></div>
+              </div>
+              <div class="sp-tech"><span class="tc">Pathfinding</span><span class="tc">IoT Tracking</span><span class="tc">Push API</span></div>
+            </div>
+            <div class="sp-visual">
+              <div class="spv-status">
+                <div class="svs-head">🛡️ Live Dispatch Board</div>
+                <div class="svs-stats">
+                  <div class="svs-stat"><span class="svs-n green">12</span><span>Available</span></div>
+                  <div class="svs-stat"><span class="svs-n yellow">4</span><span>En Route</span></div>
+                  <div class="svs-stat"><span class="svs-n red">2</span><span>On Scene</span></div>
+                </div>
+                <div class="svs-feed">
+                  <div class="svs-inc crit"><div class="svs-dot red"></div><div><strong>Crowd Surge · Zone A</strong><span>AI detected · 0m ago</span></div><span class="svs-tag r">CRITICAL</span></div>
+                  <div class="svs-inc warn"><div class="svs-dot yellow"></div><div><strong>Seat Dispute · C12</strong><span>User reported · 3m ago</span></div><span class="svs-tag y">RESPONDING</span></div>
+                  <div class="svs-inc safe"><div class="svs-dot green"></div><div><strong>Medical · Gate A</strong><span>Resolved · 8m ago</span></div><span class="svs-tag g">RESOLVED</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 3: Seat Dispute -->
+        <div class="sec-panel" data-panel="3">
+          <div class="sp-layout">
+            <div class="sp-info">
+              <div class="sp-badge purple">04 · Fan Tool</div>
+              <h3>🪑 Seat Dispute Resolution</h3>
+              <p>No more arguments over seats. Fans scan their ticket QR in-app for instant verification. Disputes auto-alert the nearest staff member and are typically resolved in under 2 minutes.</p>
+              <div class="sp-points">
+                <div class="spp"><div class="spp-dot blue"></div><div><strong>QR Ticket Scan</strong><p>Verified against backend ticket database in real time — no ambiguity</p></div></div>
+                <div class="spp"><div class="spp-dot green"></div><div><strong>Raise Dispute in 1 Tap</strong><p>One-tap dispute submission — staff notified with seat coordinates instantly</p></div></div>
+                <div class="spp"><div class="spp-dot yellow"></div><div><strong>Digital Dispute Log</strong><p>Full history maintained for accountability and post-event review</p></div></div>
+              </div>
+              <div class="seat-verify">
+                <div class="sv-icon">🎟️</div>
+                <div class="sv-info"><strong>Seat C · Row 12 · Block 4</strong><span class="sv-ok">✓ Verified — Ticket Valid</span></div>
+              </div>
+              <div class="sp-tech"><span class="tc">QR Reader</span><span class="tc">Ticket DB</span><span class="tc">Staff Push</span></div>
+            </div>
+            <div class="sp-visual">
+              <div class="spv-qr">
+                <div class="qr-title">Scan your ticket</div>
+                <div class="qr-box">
+                  <div class="qr-corner tl"></div><div class="qr-corner tr"></div>
+                  <div class="qr-corner bl"></div><div class="qr-corner br"></div>
+                  <div class="qr-scan-line"></div>
+                  <div class="qr-icon">🎟️</div>
+                </div>
+                <div class="qr-status">Hold QR code in frame</div>
+                <div class="qr-dispute">🚨 Raise Seat Dispute</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 4: Conflict Prevention -->
+        <div class="sec-panel" data-panel="4">
+          <div class="sp-layout">
+            <div class="sp-info">
+              <div class="sp-badge yellow">05 · Prevention</div>
+              <h3>🔔 Conflict Prevention &amp; De-escalation</h3>
+              <p>Before a tense area becomes a crisis, the system proactively nudges nearby fans toward calmer zones — reducing pressure and preventing escalation entirely.</p>
+              <div class="sp-points">
+                <div class="spp"><div class="spp-dot yellow"></div><div><strong>Zone Pressure Alerts</strong><p>Triggered when a zone crosses 80% density or AI detects tension signals</p></div></div>
+                <div class="spp"><div class="spp-dot blue"></div><div><strong>Alternate Route Suggestions</strong><p>System suggests safer, less-congested paths to the same destination</p></div></div>
+                <div class="spp"><div class="spp-dot green"></div><div><strong>Staff Pre-Positioning</strong><p>Security auto-alerted to move toward at-risk zones before incidents occur</p></div></div>
+              </div>
+              <div class="alert-notif-box">
+                <div class="anb-icon">⚠️</div>
+                <div class="anb-body">
+                  <strong>Area is tense — North Stand B3</strong>
+                  <span>Consider moving to Section D — safer zone nearby. Route suggested →</span>
+                </div>
+              </div>
+              <div class="sp-tech"><span class="tc">Density ML</span><span class="tc">Route Engine</span><span class="tc">FCM Push</span></div>
+            </div>
+            <div class="sp-visual">
+              <div class="spv-notifs">
+                <div class="svn-title">📢 Live Fan Alerts</div>
+                <div class="svn-item y"><span>⚠️</span><p>North Stand is tense — route D suggested</p><span class="svn-t">now</span></div>
+                <div class="svn-item b"><span>🚶</span><p>Section D has space — 3 min walk</p><span class="svn-t">1m</span></div>
+                <div class="svn-item g"><span>✅</span><p>Zone C cleared — all safe</p><span class="svn-t">4m</span></div>
+                <div class="svn-item y"><span>⚠️</span><p>Gate 3 surge predicted — use Gate 5</p><span class="svn-t">6m</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 5: Safe Zone Guidance -->
+        <div class="sec-panel" data-panel="5">
+          <div class="sp-layout">
+            <div class="sp-info">
+              <div class="sp-badge green">06 · Safety Critical</div>
+              <h3>🧭 Safe Zone &amp; Exit Guidance</h3>
+              <p>In any emergency — or just when a fan feels unsafe — the app instantly highlights nearest safe zones, help desks, and emergency exits with live crowd-aware routing.</p>
+              <div class="sp-points">
+                <div class="spp"><div class="spp-dot green"></div><div><strong>Nearest Safe Zone</strong><p>Color-coded safe area ring on map — always up to date with live heatmap</p></div></div>
+                <div class="spp"><div class="spp-dot blue"></div><div><strong>Help Desk Locations</strong><p>Pinned on map with real-time staffing status and ETA</p></div></div>
+                <div class="spp"><div class="spp-dot yellow"></div><div><strong>Emergency Exit Routing</strong><p>Dynamic path avoids crowds — recalculated every 5 seconds during evacuation</p></div></div>
+              </div>
+              <div class="exit-list">
+                <div class="el"><span class="el-icon">🟢</span><div><strong>Safe Zone · Section D</strong><span>2 min walk · Low density</span></div></div>
+                <div class="el"><span class="el-icon">🆘</span><div><strong>Emergency Exit · Gate 6</strong><span>1.2 min · Crowd-free path</span></div></div>
+                <div class="el"><span class="el-icon">ℹ️</span><div><strong>Help Desk · Level 2</strong><span>Staffed · Open now</span></div></div>
+              </div>
+              <div class="sp-tech"><span class="tc">Indoor Maps</span><span class="tc">A* Routing</span><span class="tc">Live Density</span></div>
+            </div>
+            <div class="sp-visual">
+              <div class="spv-exit">
+                <div class="sve-label">Safe zones near you</div>
+                <div class="sve-map">
+                  <div class="sve-zone g" style="top:8%;left:10%;width:30%;height:26%">D · Safe</div>
+                  <div class="sve-zone r" style="top:8%;right:10%;width:28%;height:22%">B · Danger</div>
+                  <div class="sve-zone g" style="bottom:10%;left:15%;width:32%;height:22%">F · Safe</div>
+                  <div class="sve-exit">🚪</div>
+                  <div class="sve-user">📍</div>
+                  <div class="sve-path"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 6: Anonymous Reporting -->
+        <div class="sec-panel" data-panel="6">
+          <div class="sp-layout">
+            <div class="sp-info">
+              <div class="sp-badge purple">07 · Privacy First</div>
+              <h3>👥 Anonymous &amp; Secure Reporting</h3>
+              <p>No names. No fear. Every report is fully anonymised and encrypted before it leaves the device — encouraging fans to speak up early, before situations escalate.</p>
+              <div class="sp-points">
+                <div class="spp"><div class="spp-dot blue"></div><div><strong>Identity Masked</strong><p>No personal data is ever linked to a submitted report</p></div></div>
+                <div class="spp"><div class="spp-dot green"></div><div><strong>End-to-End Encrypted</strong><p>AES-256 encryption with zero-knowledge architecture for report data</p></div></div>
+                <div class="spp"><div class="spp-dot purple"></div><div><strong>Aggregated Insights Only</strong><p>Admins see trends and heatmaps — never individual fan identities</p></div></div>
+                <div class="spp"><div class="spp-dot yellow"></div><div><strong>Trusted Participation</strong><p>More reports = better safety. Trust drives early warning coverage</p></div></div>
+              </div>
+              <div class="anon-badges">
+                <div class="ab"><div class="ab-icon">🎭</div><strong>Identity Masked</strong></div>
+                <div class="ab"><div class="ab-icon">🔒</div><strong>E2E Encrypted</strong></div>
+                <div class="ab"><div class="ab-icon">📊</div><strong>Aggregated Only</strong></div>
+              </div>
+              <div class="sp-tech"><span class="tc">AES-256</span><span class="tc">Zero-Knowledge</span><span class="tc">GDPR Compliant</span></div>
+            </div>
+            <div class="sp-visual">
+              <div class="spv-anon">
+                <div class="sva-shield">🛡️</div>
+                <div class="sva-title">Your identity is protected</div>
+                <div class="sva-steps">
+                  <div class="svas"><div class="svas-num">1</div><span>You submit report</span></div>
+                  <div class="svas-arrow">↓</div>
+                  <div class="svas"><div class="svas-num">2</div><span>Identity stripped &amp; encrypted</span></div>
+                  <div class="svas-arrow">↓</div>
+                  <div class="svas"><div class="svas-num">3</div><span>Anonymous report reaches staff</span></div>
+                  <div class="svas-arrow">↓</div>
+                  <div class="svas"><div class="svas-num">4</div><span>You stay completely private</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how-it-works" class="section section-dark">
+    <div class="container">
+      <div class="sec-hd">
+        <span class="stag">How It Works</span>
+        <h2>From Sensor to <span class="gtext">Smart Guidance</span></h2>
+        <p>Five intelligent layers working together in real time — from raw data to fan action in under 5 seconds.</p>
+      </div>
+
+      <div class="arch-flow">
+        <div class="arch-step" data-delay="0">
+          <div class="arch-icon ai-blue">📱</div>
+          <div class="arch-label">Fan App</div>
+          <div class="arch-desc">Location sharing, navigation requests, food orders & SOS signals</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-step" data-delay="150">
+          <div class="arch-icon ai-cyan">📡</div>
+          <div class="arch-label">IoT Sensors</div>
+          <div class="arch-desc">BLE beacons, CCTV AI, foot-pressure sensors, gate counters</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-step" data-delay="300">
+          <div class="arch-icon ai-purple">🧠</div>
+          <div class="arch-label">AI Processing</div>
+          <div class="arch-desc">ML models predict wait times, crowd surges & evacuation paths</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-step" data-delay="450">
+          <div class="arch-icon ai-green">📊</div>
+          <div class="arch-label">Real-Time Insights</div>
+          <div class="arch-desc">Heatmaps, wait scores, and routing pushed via WebSocket every 5s</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-step" data-delay="600">
+          <div class="arch-icon ai-teal">🎯</div>
+          <div class="arch-label">Fan Guidance</div>
+          <div class="arch-desc">Personalized turns, alerts, and suggestions delivered instantly</div>
+        </div>
+      </div>
+
+      <div class="arch-cards">
+        <div class="ac"><div class="ac-icon">⚡</div><strong>Sub-5s Latency</strong><p>Sensor event to user notification in under 5 seconds via WebSocket streaming.</p></div>
+        <div class="ac"><div class="ac-icon">🔒</div><strong>Privacy by Design</strong><p>Crowd data anonymised and aggregated. No individual tracking without consent.</p></div>
+        <div class="ac"><div class="ac-icon">📡</div><strong>Offline Fallback</strong><p>Cached maps and last-known heatmaps ensure guidance even without connectivity.</p></div>
+        <div class="ac"><div class="ac-icon">🏟️</div><strong>Digital Twin</strong><p>A live 3D simulation of every zone mirrors real sensor data for operator control.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO -->
+  <section id="demo" class="section">
+    <div class="container">
+      <div class="sec-hd">
+        <span class="stag">UI Preview</span>
+        <h2>The App That <span class="gtext">Runs It All</span></h2>
+        <p>Modern, intuitive, built for 80,000 fans simultaneously.</p>
+      </div>
+      <div class="phone-showcase">
+
+        <!-- Phone 1: Navigation -->
+        <div class="phone-wrap left-phone" data-delay="0">
+          <div class="phone-label">Smart Navigation</div>
+          <div class="phone-frame">
+            <div class="phone-screen nav-screen">
+              <div class="s-hdr"><div class="back">‹</div><span>Navigation</span><div class="more">⋮</div></div>
+              <div class="nav-map">
+                <div class="mg">
+                  <div class="mz crowded" style="top:10%;left:8%;width:32%;height:24%">Zone A</div>
+                  <div class="mz moderate" style="top:10%;left:50%;width:34%;height:20%">Zone B</div>
+                  <div class="mz free" style="top:42%;left:18%;width:26%;height:30%">Zone C</div>
+                  <div class="mz moderate" style="top:48%;left:54%;width:30%;height:26%">Zone D</div>
+                  <div class="route-svg"></div>
+                  <div class="udot"></div>
+                  <div class="ddot"></div>
+                </div>
+              </div>
+              <div class="nav-bar">
+                <div><div class="nav-eta">4 min</div><div class="nav-to">to Seat 47B · Row 12</div></div>
+                <div class="rtag grn">Optimal Route</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone 2: Heatmap Center -->
+        <div class="phone-wrap center-phone" data-delay="200">
+          <div class="phone-label">Live Heatmap</div>
+          <div class="phone-frame main-frame">
+            <div class="phone-screen hm-screen">
+              <div class="s-hdr dark-hdr"><span class="st">StadiumIQ</span><div class="lchip"><span class="ld"></span>LIVE</div></div>
+              <div class="hm-view">
+                <div class="hm-field-sm"></div>
+                <div class="hm-cz cz1"></div>
+                <div class="hm-cz cz2"></div>
+                <div class="hm-cz cz3"></div>
+                <div class="hm-cz cz4"></div>
+                <div class="hm-cz cz5"></div>
+                <div class="hm-leg"><span class="hl g">Low</span><span class="hl y">Med</span><span class="hl r">High</span></div>
+              </div>
+              <div class="hm-stats">
+                <div class="hms"><span class="hn">41,200</span><span class="hl2">Fans inside</span></div>
+                <div class="hms"><span class="hn">73%</span><span class="hl2">Capacity</span></div>
+                <div class="hms"><span class="hn teal">5s</span><span class="hl2">Update</span></div>
+              </div>
+              <div class="bnav">
+                <div class="bni active">🗺️<span>Map</span></div>
+                <div class="bni">🍔<span>Order</span></div>
+                <div class="bni">⏱️<span>Waits</span></div>
+                <div class="bni">🔔<span>Alerts</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone 3: Food Order -->
+        <div class="phone-wrap right-phone" data-delay="400">
+          <div class="phone-label">Food Ordering</div>
+          <div class="phone-frame">
+            <div class="phone-screen food-screen">
+              <div class="s-hdr"><div class="back">‹</div><span>Order Food</span><div class="cart">🛒</div></div>
+              <div class="food-list">
+                <div class="fi"><span class="fe">🍕</span><div class="finfo"><strong>Pizza Slice</strong><small>Pickup 18:45 · Stall 4</small></div><button class="fab">+</button></div>
+                <div class="fi"><span class="fe">🍟</span><div class="finfo"><strong>Fries Large</strong><small>Pickup 18:45 · Stall 2</small></div><button class="fab">+</button></div>
+                <div class="fi fi-done"><span class="fe">🥤</span><div class="finfo"><strong>Cola 500ml</strong><small>✓ Added to order</small></div><button class="fab done">✓</button></div>
+                <div class="fi"><span class="fe">🌮</span><div class="finfo"><strong>Taco Combo</strong><small>Pickup 19:00 · Stall 7</small></div><button class="fab">+</button></div>
+                <div class="stall-tip">💡 Stall 6 near you — zero queue!</div>
+              </div>
+              <div class="order-bar"><div class="oi">1 item · <strong>₹180</strong></div><button class="checkout">Checkout</button></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MEDICAL -->
+  <section id="medical" class="section section-dark">
+    <div class="container">
+      <div class="sec-hd">
+        <span class="stag med-stag">🏥 Medical Response</span>
+        <h2>On-Site Medical <span class="gtext">Command Centre</span></h2>
+        <p>Integrated medical intelligence — from first-aid bays to hospitals — ensuring every fan's safety in seconds.</p>
+      </div>
+
+      <div class="med-banner">
+        <div class="mb-pulse"></div>
+        <span class="mb-icon">🚑</span>
+        <div class="mb-text"><strong>MEDICAL EMERGENCY?</strong><span>Tap SOS in StadiumIQ — nearest medic reaches you in &lt; 3 min</span></div>
+        <a href="tel:112" class="mb-call">📞 Call 112</a>
+      </div>
+
+      <div class="med-cols">
+
+        <div class="med-col">
+          <div class="mc-hdr"><div class="mc-icon">🩺</div><div><h3>On-Site Medical Teams</h3><p>Assigned zones · Real-time tracking</p></div></div>
+          <div class="mc-list">
+            <div class="mct" data-delay="0"><div class="mca">👨‍⚕️</div><div class="mci"><strong>Dr. R. Sharma</strong><span>Chief Medical Officer</span><span>📍 Main Control Room</span></div><div class="mcs avail"></div></div>
+            <div class="mct" data-delay="80"><div class="mca">👩‍⚕️</div><div class="mci"><strong>Dr. P. Nair</strong><span>Emergency Physician</span><span>📍 North Stand · Gate A</span></div><div class="mcs avail"></div></div>
+            <div class="mct" data-delay="160"><div class="mca">🧑‍⚕️</div><div class="mci"><strong>Paramedic Team 2</strong><span>2 trained paramedics</span><span>📍 South Stand</span></div><div class="mcs busy"></div></div>
+            <div class="mct" data-delay="240"><div class="mca">👩‍⚕️</div><div class="mci"><strong>First-Aid Squad A</strong><span>4 certified first-aiders</span><span>📍 East &amp; West Corridors</span></div><div class="mcs avail"></div></div>
+            <div class="mct" data-delay="320"><div class="mca">🧑‍⚕️</div><div class="mci"><strong>Roving Medic Unit</strong><span>Mobile · E-cart</span><span>📍 Dynamic — AI-tracked</span></div><div class="mcs avail"></div></div>
+          </div>
+          <div class="mc-foot">
+            <div class="msr"><span>Total On-Duty</span><strong>14 personnel</strong></div>
+            <div class="msr"><span>Avg. Response</span><strong class="tg">2.8 min</strong></div>
+            <div class="msr"><span>AEDs Deployed</span><strong>8 units</strong></div>
+          </div>
+        </div>
+
+        <div class="med-col">
+          <div class="mc-hdr"><div class="mc-icon">🏥</div><div><h3>Nearest Hospitals &amp; Stores</h3><p>Live distance · Ambulance times</p></div></div>
+          <div class="prox-sec">
+            <div class="prox-lbl">🏥 Hospitals</div>
+            <div class="prox-list">
+              <div class="pc hosp" data-delay="0"><div class="pl"><div class="pi">🏥</div><div class="pinfo"><strong>City General Hospital</strong><span>Multi-speciality · ICU</span><span class="pdist">1.2 km · ~4 min drive</span></div></div><div class="pact"><a href="tel:+911800111222" class="pcall">📞 Call</a><span class="pbadge g">24/7</span></div></div>
+              <div class="pc hosp" data-delay="80"><div class="pl"><div class="pi">🏥</div><div class="pinfo"><strong>Apollo Trauma Centre</strong><span>Trauma · Cardiac</span><span class="pdist">2.4 km · ~7 min drive</span></div></div><div class="pact"><a href="tel:+911800222333" class="pcall">📞 Call</a><span class="pbadge g">24/7</span></div></div>
+              <div class="pc hosp" data-delay="160"><div class="pl"><div class="pi">🏥</div><div class="pinfo"><strong>St. Mary's Centre</strong><span>General · Paediatric</span><span class="pdist">3.8 km · ~10 min</span></div></div><div class="pact"><a href="tel:+911800333444" class="pcall">📞 Call</a><span class="pbadge y">ER Only</span></div></div>
+            </div>
+          </div>
+          <div class="prox-sec" style="margin-top:4px">
+            <div class="prox-lbl">💊 Pharmacies</div>
+            <div class="prox-list">
+              <div class="pc pharm" data-delay="0"><div class="pl"><div class="pi">💊</div><div class="pinfo"><strong>Stadium First-Aid Bay</strong><span>Painkillers · Bandages</span><span class="pdist">📍 Gate C Level 1 · On-site</span></div></div><div class="pact"><span class="pbadge g">On-Site</span></div></div>
+              <div class="pc pharm" data-delay="80"><div class="pl"><div class="pi">🏪</div><div class="pinfo"><strong>MedPlus Pharmacy</strong><span>Full pharmacy</span><span class="pdist">0.6 km · ~2 min walk</span></div></div><div class="pact"><a href="tel:+911800444555" class="pcall">📞 Call</a><span class="pbadge g">Open</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="med-col">
+          <div class="mc-hdr"><div class="mc-icon">📞</div><div><h3>Helplines &amp; Instant SOS</h3><p>One tap · Zero delay</p></div></div>
+          <div class="hl-list">
+            <div class="hlc hl-r" data-delay="0"><div class="hlct"><div class="hli">🚑</div><div class="hlin"><strong>National Ambulance</strong><span>Emergency services</span></div></div><a href="tel:108" class="hcb red">📞 108</a></div>
+            <div class="hlc hl-r" data-delay="80"><div class="hlct"><div class="hli">🆘</div><div class="hlin"><strong>National Emergency</strong><span>Police · Fire · Medical</span></div></div><a href="tel:112" class="hcb red">📞 112</a></div>
+            <div class="hlc hl-b" data-delay="160"><div class="hlct"><div class="hli">🏟️</div><div class="hlin"><strong>Stadium Medical</strong><span>On-site direct line</span></div></div><a href="tel:+911800100200" class="hcb blue">📞 Connect</a></div>
+            <div class="hlc hl-b" data-delay="240"><div class="hlct"><div class="hli">🏥</div><div class="hlin"><strong>City General ER</strong><span>Nearest hospital</span></div></div><a href="tel:+911800111222" class="hcb blue">📞 Connect</a></div>
+            <div class="hlc hl-g" data-delay="320"><div class="hlct"><div class="hli">🧠</div><div class="hlin"><strong>Mental Health</strong><span>Anxiety · Panic · Support</span></div></div><a href="tel:1800599019" class="hcb green">📞 iCall</a></div>
+          </div>
+          <div class="sos-card">
+            <div class="sos-ring"></div>
+            <div class="sos-emoji">🆘</div>
+            <div class="sos-txt"><strong>In-App SOS</strong><p>Hold 3s in StadiumIQ — shares live GPS to nearest medic instantly.</p></div>
+            <div class="sos-feats"><span>📍 Auto location</span><span>🔔 Notifies in 2s</span><span>📞 Auto-calls 108</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="container footer-in">
+      <div class="fb">
+        <div class="flogo">⚡ StadiumIQ</div>
+        <p>Smart Stadium Experience System — Hackathon 2025</p>
+        <div class="fbadges"><span class="fb2">🏆 Smart Cities</span><span class="fb2">🤖 AI/ML</span><span class="fb2">🏥 Medical</span><span class="fb2">📡 IoT</span></div>
+      </div>
+      <div class="fnav">
+        <div class="fn"><strong>Product</strong><a href="#features">Features</a><a href="#heatmap">Heatmap</a><a href="#demo">Demo</a></div>
+        <div class="fn"><strong>Safety</strong><a href="#how-it-works">Architecture</a><a href="#medical">Medical</a></div>
+      </div>
+    </div>
+    <div class="fbot">Built with ❤️ for the Hackathon · StadiumIQ © 2025</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
