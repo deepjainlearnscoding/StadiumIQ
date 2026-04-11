@@ -4,6 +4,8 @@ Smart stadium experience demo: landing page plus an **incident reporting API** w
 
 **Repository:** [github.com/deepjainlearnscoding/StadiumIQ](https://github.com/deepjainlearnscoding/StadiumIQ)
 
+**Live demo:** [stadiumiq.onrender.com](https://stadiumiq.onrender.com) (Render — may spin up after idle)
+
 ## What others get
 
 - **Clone and run locally** — full UI and API in a few commands (below).
@@ -26,7 +28,7 @@ Development with auto-restart: `npm run dev` (from `server/`).
 
 1. Push this repo to GitHub (already set up if you use the link above).
 2. In [Render](https://render.com), create a **New Web Service** from the repo, or use **New → Blueprint** and select the repo (uses [`render.yaml`](render.yaml)).
-3. After deploy, share the URL Render gives you (for example `https://stadiumiq.onrender.com`). The home page and incident demo use the API on the **same origin**, so no extra configuration is needed.
+3. After deploy, share your Render URL. This project is deployed at **https://stadiumiq.onrender.com** — the UI and `/api/*` share the same origin, so no extra configuration is needed.
 
 Other hosts (Railway, Fly.io, a VPS, etc.) work the same way: run `node server/index.js` from the repo root with `npm install` run inside `server/` first. Set the platform’s `PORT` if required; the app reads `process.env.PORT`.
 
