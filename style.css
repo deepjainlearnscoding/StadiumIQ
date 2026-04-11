@@ -9,8 +9,7 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--font);background:linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)),linear-gradient(-45deg,#0a0f24,#2c144b,#0d3861,#084b6f);background-size:100% 100%,400% 400%;animation:gradBG 15s ease infinite;color:var(--t1);overflow-x:hidden;line-height:1.6}
-@keyframes gradBG{0%{background-position:0% 0%,0% 50%}50%{background-position:0% 0%,100% 50%}100%{background-position:0% 0%,0% 50%}}
+body{font-family:var(--font);background:#070a13;color:var(--t1);overflow-x:hidden;line-height:1.6}
 a{color:inherit;text-decoration:none}
 ul{list-style:none}
 .container{max-width:1200px;margin:0 auto;padding:0 24px}
@@ -587,6 +586,53 @@ ul{list-style:none}
   .ssm-grid{grid-template-columns:1fr}
   .ssm-toolbar{flex-direction:column;align-items:stretch}
   .ssm-live-badge{align-self:flex-start}
+}
+
+/* ── ORGANIC TECH BACKGROUND ─────────────────── */
+.tech-bg {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+  background: #070a13;
+}
+.tb-grid {
+  position: absolute; inset: 0;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center center;
+  z-index: 1;
+}
+.tb-lines {
+  position: absolute; top: 15%; right: 25%; width: 350px; height: 350px;
+  background: repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(255,255,255,0.04) 7px, rgba(255,255,255,0.04) 8px);
+  transform: rotate(-15deg);
+  opacity: 0.8;
+  z-index: 1;
+}
+.tb-lines.left {
+  top: 60%; right: auto; left: 10%; transform: rotate(25deg);
+}
+.tb-blob {
+  position: absolute; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  filter: blur(85px);
+  opacity: 0.85;
+  animation: tbFloat 22s infinite alternate ease-in-out;
+}
+.tb-blob.b-cyan { width: 45vw; height: 45vw; background: #00f2fe; top: -15%; left: 15%; animation-delay: 0s; }
+.tb-blob.b-blue { width: 55vw; height: 35vw; background: #4facfe; top: 40%; right: -15%; animation-delay: -5s; }
+.tb-blob.b-purple { width: 40vw; height: 50vw; background: #667eea; bottom: -20%; left: -5%; animation-delay: -10s; }
+.tb-blob.b-orange { width: 35vw; height: 35vw; background: #ff5e62; top: 25%; left: 35%; animation-delay: -15s; mix-blend-mode: color-dodge; }
+
+@keyframes tbFloat {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+  50% { transform: translate(8%, 10%) scale(1.15) rotate(45deg); border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%; }
+  100% { transform: translate(-8%, -10%) scale(0.9) rotate(-45deg); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+}
+
+/* Ensure content sits above background */
+#navbar, section, .section, #hero, #footer, nav, header, footer, 
+[class*="fph"], .auth-page, .auth-brand, .auth-form-panel, .skip-bar {
+  position: relative; z-index: 1;
 }
 
 /* ── GLASSMORPHISM ─────────────────── */

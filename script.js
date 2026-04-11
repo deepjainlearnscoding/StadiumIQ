@@ -863,3 +863,20 @@ tabs.forEach(tab => {
     });
   }, 4000);
 })();
+
+// -- ORGANIC TECH BACKGROUND INIT -------------
+(function initOrganicTechBg() {
+  if (document.querySelector('.tech-bg')) return;
+  const bg = document.createElement('div');
+  bg.className = 'tech-bg';
+  bg.innerHTML = 
+    <div class="tb-grid"></div>
+    <div class="tb-lines"></div>
+    <div class="tb-lines left"></div>
+    <div class="tb-blob b-cyan"></div>
+    <div class="tb-blob b-blue"></div>
+    <div class="tb-blob b-purple"></div>
+    <div class="tb-blob b-orange"></div>
+  ;
+  document.body.prepend(bg);
+})();
