@@ -9,7 +9,7 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--font);background:var(--bg0);color:var(--t1);overflow-x:hidden;line-height:1.6}
+body{font-family:var(--font);background:transparent;color:var(--t1);overflow-x:hidden;line-height:1.6}
 a{color:inherit;text-decoration:none}
 ul{list-style:none}
 .container{max-width:1200px;margin:0 auto;padding:0 24px}
@@ -587,3 +587,35 @@ ul{list-style:none}
   .ssm-toolbar{flex-direction:column;align-items:stretch}
   .ssm-live-badge{align-self:flex-start}
 }
+
+/* ── HEATMAP PULSE BACKGROUND ─────────────────── */
+html { background: #050810; }
+.hm-bg {
+  position: fixed; inset: 0; z-index: 0;
+  background: #050810; overflow: hidden; pointer-events: none;
+}
+.hm-bg-blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(90px);
+  transition: background 3s ease;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+.hm-bg-blob.b1 { width: 55vw; height: 42vw; background: radial-gradient(circle, rgba(239,68,68,.42) 0%, transparent 70%); top: -12%; left: -8%; animation: hmb1 17s ease-in-out infinite alternate; }
+.hm-bg-blob.b2 { width: 48vw; height: 44vw; background: radial-gradient(circle, rgba(245,158,11,.36) 0%, transparent 70%); top: 22%; right: -14%; animation: hmb2 23s ease-in-out infinite alternate; }
+.hm-bg-blob.b3 { width: 52vw; height: 36vw; background: radial-gradient(circle, rgba(34,197,94,.28) 0%, transparent 70%); bottom: -8%; left: 18%; animation: hmb3 27s ease-in-out infinite alternate; }
+.hm-bg-blob.b4 { width: 36vw; height: 36vw; background: radial-gradient(circle, rgba(239,68,68,.22) 0%, transparent 70%); top: 52%; right: 8%; animation: hmb4 19s ease-in-out infinite alternate; }
+.hm-bg-blob.b5 { width: 42vw; height: 32vw; background: radial-gradient(circle, rgba(245,158,11,.2) 0%, transparent 70%); top: 12%; left: 32%; animation: hmb5 31s ease-in-out infinite alternate; }
+.hm-bg-overlay { position: absolute; inset: 0; background: rgba(5,8,16,.52); }
+@keyframes hmb1 { 0% { transform: translate(0,0) scale(1); } 50% { transform: translate(8vw,6vh) scale(1.22); } 100% { transform: translate(-4vw,11vh) scale(.92); } }
+@keyframes hmb2 { 0% { transform: translate(0,0) scale(1); } 50% { transform: translate(-11vw,-7vh) scale(1.3); } 100% { transform: translate(5vw,9vh) scale(1.08); } }
+@keyframes hmb3 { 0% { transform: translate(0,0) scale(1); } 50% { transform: translate(6vw,-7vh) scale(1.18); } 100% { transform: translate(-9vw,-9vh) scale(.88); } }
+@keyframes hmb4 { 0% { transform: translate(0,0) scale(1); } 50% { transform: translate(-7vw,9vh) scale(1.38); } 100% { transform: translate(8vw,-6vh) scale(.96); } }
+@keyframes hmb5 { 0% { transform: translate(0,0) scale(1); } 50% { transform: translate(4vw,9vh) scale(1.14); } 100% { transform: translate(-6vw,-7vh) scale(1.04); } }
+
+/* Page sections sit above hm-bg */
+#navbar, section, .section, #hero, #footer,
+nav, header, footer, [class*="fph"], .auth-page, .auth-brand,
+.auth-form-panel, .skip-bar { position: relative; z-index: 1; }
+

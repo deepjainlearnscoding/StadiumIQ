@@ -835,3 +835,31 @@ tabs.forEach(tab => {
     }
   });
 });
+
+// -- HEATMAP BACKGROUND COLOR CYCLING -------------
+(function initHeatmapBg() {
+  const blobs = document.querySelectorAll('.hm-bg-blob');
+  if (!blobs.length) return;
+  
+  // Base heatmap colors with variable alpha
+  const colors = [
+    { r: 239, g: 68, b: 68 },   // Red
+    { r: 245, g: 158, b: 11 },  // Yellow
+    { r: 34, g: 197, b: 94 },   // Green
+    { r: 79, g: 142, b: 247 },  // Blue
+    { r: 168, g: 85, b: 247 }   // Purple
+  ];
+  
+  setInterval(() => {
+    blobs.forEach(blob => {
+      // 30% chance to change color per interval
+      if (Math.random() > 0.3) return;
+      
+      const c = colors[Math.floor(Math.random() * colors.length)];
+      // Randomize opacity between 0.15 and 0.45
+      const a = (Math.random() * 0.3 + 0.15).toFixed(2);
+      
+      blob.style.background = "radial-gradient(circle, rgba($($c.r),$($c.g),$($c.b),$a) 0%, transparent 70%)";
+    });
+  }, 4000);
+})();
