@@ -51,14 +51,36 @@ if (hmGrid) {
   updateMiniHM(); setInterval(updateMiniHM, 2500);
 }
 
-// ── NAVBAR ────────────────────────────────
+// ── NAVBAR & GLOBAL SCROLL ────────────────
 const nav = document.getElementById('navbar');
-window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 50));
+const hc = document.querySelector('.hero-content');
 const ham = document.getElementById('hamburger');
-ham.addEventListener('click', () => nav.classList.toggle('menu-open'));
-document.addEventListener('click', e => { if (!nav.contains(e.target)) nav.classList.remove('menu-open'); });
+
+let lastScrollY = window.scrollY;
+let ticking = false;
+
+window.addEventListener('scroll', () => {
+  lastScrollY = window.scrollY;
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
+      // Navbar background toggle
+      if (nav) nav.classList.toggle('scrolled', lastScrollY > 50);
+      
+      // Hardware-accelerated Parallax to prevent jitter
+      if (hc && lastScrollY < window.innerHeight) { 
+        hc.style.transform = `translate3d(0, ${lastScrollY * 0.15}px, 0)`; 
+        hc.style.opacity = Math.max(0, 1 - (lastScrollY / (window.innerHeight * 0.6))); 
+      }
+      ticking = false;
+    });
+    ticking = true;
+  }
+}, { passive: true });
+
+if (ham) ham.addEventListener('click', () => nav.classList.toggle('menu-open'));
+document.addEventListener('click', e => { if (nav && !nav.contains(e.target)) nav.classList.remove('menu-open'); });
 document.querySelectorAll('.nav-links a').forEach(l => l.addEventListener('click', () => nav.classList.remove('menu-open')));
-document.addEventListener('keydown', e => { if (e.key==='Escape') nav.classList.remove('menu-open'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav) nav.classList.remove('menu-open'); });
 
 // ── SCROLL REVEAL ─────────────────────────
 const reveals = document.querySelectorAll('.fcard,.mct,.pc,.hlc,.arch-step,.phone-wrap,.ssm-animate');
@@ -73,12 +95,7 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: .1 });
 reveals.forEach(el => obs.observe(el));
 
-// ── PARALLAX ──────────────────────────────
-const hc = document.querySelector('.hero-content');
-window.addEventListener('scroll', () => {
-  const s = scrollY;
-  if (s < innerHeight && hc) { hc.style.transform = `translateY(${s*.1}px)`; hc.style.opacity = 1-s/(innerHeight*.75); }
-});
+// Parallax logic moved to main RAF scroll listener to fix jitter
 
 // ── LIVE WAIT TIMES SIMULATION ────────────
 const WR_DATA = [
@@ -319,18 +336,65 @@ function toast(msg) {
   setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(20px)'; setTimeout(()=>t.remove(),500); }, 3500);
 }
 
-// ── SMART NOTIFICATIONS ───────────────────
-const NOTIFS = [
-  '📍 Gate 2 is less crowded — switch now for 3 min entry',
-  '🍟 Stall 6 near you has zero queue right now!',
-  '⚽ Match starts in 10 min — head to your seat via Route C',
-  '🚽 Washroom on Level 2 is free — Level 3 has 9 min wait',
-  '🌡️ North Stand is congested — Route D suggested',
-  '🎟️ Gate 4 freshly opened — fastest entry right now',
-  '⏱️ Food Court queue dropped to 2 min — grab a bite!',
+// ── NOTIFICATION CENTER ───────────────────
+// Delayed, isolated critical notifications (no screen popups)
+const CRITICAL_NOTIFS = [
+  '🚨 <b>High Density Warning:</b> North Stand is heavily congested. Staff repositioning.',
+  '⚠️ <b>Queue Alert:</b> Gate 4 queue exceeds 15 minutes. Rerouting recommended.',
+  '📍 <b>Security Update:</b> Minor incident cleared near Gate 2.',
+  '⚡ <b>System:</b> AI Predictive model indicates potential surge in East Corridor in 15 mins.',
 ];
-let ni = 0;
-setTimeout(()=>{ toast(NOTIFS[ni++%NOTIFS.length]); setInterval(()=>toast(NOTIFS[ni++%NOTIFS.length]),8000); }, 3500);
+let notifIndex = 0;
+
+// Inject UI
+const ncBtn = document.createElement('div');
+ncBtn.className = 'nc-btn';
+ncBtn.innerHTML = '🔔<span class="nc-badge" style="display:none">0</span>';
+document.body.appendChild(ncBtn);
+
+const ncPanel = document.createElement('div');
+ncPanel.className = 'nc-panel';
+ncPanel.innerHTML = '<h4>Notification Center</h4><div class="nc-list"><div class="nc-item empty">No recent notifications</div></div>';
+document.body.appendChild(ncPanel);
+
+let badgeCount = 0;
+ncBtn.addEventListener('click', () => {
+  ncPanel.classList.toggle('open');
+  if (ncPanel.classList.contains('open')) {
+    badgeCount = 0;
+    ncBtn.querySelector('.nc-badge').textContent = badgeCount;
+    ncBtn.querySelector('.nc-badge').style.display = 'none';
+  }
+});
+
+function pushNotification(msg) {
+  const list = ncPanel.querySelector('.nc-list');
+  const empty = list.querySelector('.empty');
+  if (empty) empty.remove();
+
+  const item = document.createElement('div');
+  item.className = 'nc-item';
+  item.innerHTML = `<span>${msg}</span><small>Just now</small>`;
+  list.prepend(item);
+
+  if (!ncPanel.classList.contains('open')) {
+    badgeCount++;
+    const badge = ncBtn.querySelector('.nc-badge');
+    badge.textContent = badgeCount;
+    badge.style.display = 'flex';
+    // Instead of forcing it onto the screen, we just give a small pulse effect
+    ncBtn.style.animation = 'pulse-btn 0.5s ease 2';
+    setTimeout(() => ncBtn.style.animation = '', 1000);
+  }
+}
+
+// Emits every 150 seconds (2.5 minutes)
+setTimeout(() => {
+  pushNotification(CRITICAL_NOTIFS[notifIndex++ % CRITICAL_NOTIFS.length]);
+  setInterval(() => {
+    pushNotification(CRITICAL_NOTIFS[notifIndex++ % CRITICAL_NOTIFS.length]);
+  }, 150000);
+}, 10000); // initial 10s delay to show the user it works
 
 // ── MEDICAL DOTS ──────────────────────────
 setInterval(() => {
