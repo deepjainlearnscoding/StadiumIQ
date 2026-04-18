@@ -369,7 +369,40 @@ ncBtn.addEventListener('click', () => {
   }
 });
 
-function pushNotification(msg) {
+/* Read user's notification preferences (with safe defaults) */
+function getNotifPrefs() {
+  try { return JSON.parse(localStorage.getItem('crowdpulse_notif_prefs') || '{}'); }
+  catch(e) { return {}; }
+}
+
+/* Returns true if at least one notification category is enabled */
+function anyNotifsEnabled() {
+  const prefs = getNotifPrefs();
+  const defaults = { emergency: true, heatmap: true, food: true, nav: false, lostfound: true };
+  const merged = Object.assign({}, defaults, prefs);
+  return Object.values(merged).some(Boolean);
+}
+
+/* Map CRITICAL_NOTIFS messages to pref keys so we can gate per-category */
+const NOTIF_CATEGORY_MAP = [
+  'emergency',   // '🚨 High Density Warning…'
+  'heatmap',     // '⚠️ Queue Alert…'
+  'emergency',   // '📍 Security Update…'
+  'heatmap',     // '⚡ System: AI Predictive…'
+];
+
+function isPrefEnabled(key) {
+  const prefs = getNotifPrefs();
+  const defaults = { emergency: true, heatmap: true, food: true, nav: false, lostfound: true };
+  const val = (key in prefs) ? prefs[key] : defaults[key];
+  return val !== false;
+}
+
+function pushNotification(msg, categoryKey) {
+  /* If a specific category is given, check its pref; otherwise check global */
+  if (categoryKey && !isPrefEnabled(categoryKey)) return;
+  if (!categoryKey && !anyNotifsEnabled()) return;
+
   const list = ncPanel.querySelector('.nc-list');
   const empty = list.querySelector('.empty');
   if (empty) empty.remove();
@@ -384,19 +417,21 @@ function pushNotification(msg) {
     const badge = ncBtn.querySelector('.nc-badge');
     badge.textContent = badgeCount;
     badge.style.display = 'flex';
-    // Instead of forcing it onto the screen, we just give a small pulse effect
     ncBtn.style.animation = 'pulse-btn 0.5s ease 2';
     setTimeout(() => ncBtn.style.animation = '', 1000);
   }
 }
 
-// Emits every 150 seconds (2.5 minutes)
+// Scheduled notifications — fire only if user has not disabled all notifications
 setTimeout(() => {
-  pushNotification(CRITICAL_NOTIFS[notifIndex++ % CRITICAL_NOTIFS.length]);
+  const idx = notifIndex++ % CRITICAL_NOTIFS.length;
+  pushNotification(CRITICAL_NOTIFS[idx], NOTIF_CATEGORY_MAP[idx]);
   setInterval(() => {
-    pushNotification(CRITICAL_NOTIFS[notifIndex++ % CRITICAL_NOTIFS.length]);
+    if (!anyNotifsEnabled()) return; // silently skip if everything disabled
+    const i = notifIndex++ % CRITICAL_NOTIFS.length;
+    pushNotification(CRITICAL_NOTIFS[i], NOTIF_CATEGORY_MAP[i]);
   }, 150000);
-}, 10000); // initial 10s delay to show the user it works
+}, 10000);
 
 // ── MEDICAL DOTS ──────────────────────────
 setInterval(() => {
