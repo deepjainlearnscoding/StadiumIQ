@@ -69,7 +69,8 @@ Crowdpulse provides a **data-driven dashboard** that helps:
 
 ## 📷 Screenshots
 
-![Uploading image.png…]()
+<img width="1899" height="903" alt="image" src="https://github.com/user-attachments/assets/394288ce-261a-4dbb-b1d8-fd1b3cc2bb59" />
+
 
 
 ---
