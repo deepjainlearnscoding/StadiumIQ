@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign In — StadiumIQ</title>
-  <meta name="description" content="Sign in or create your StadiumIQ account to access real-time stadium navigation, live heatmaps, and smart fan features." />
+  <title>Sign In — CrowdPulse</title>
+  <meta name="description" content="Sign in or create your CrowdPulse account to access real-time stadium navigation, live heatmaps, and smart fan features." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
@@ -209,8 +209,8 @@
     <!-- ── Left Branding Panel ── -->
     <div class="auth-brand">
       <a href="home.html" class="auth-brand-logo">
-        <span class="logo-icon">⚡</span>
-        <span class="logo-text">StadiumIQ</span>
+        <img src="logo.png" alt="CrowdPulse Logo" style="width:28px;height:28px;object-fit:contain;border-radius:4px;">
+        <span class="logo-text">CrowdPulse</span>
       </a>
 
       <!-- Animated stadium rings -->
@@ -250,7 +250,7 @@
       <!-- ── Sign In ── -->
       <div id="signinSection" class="auth-section">
         <div class="auth-form-title">Welcome back 👋</div>
-        <div class="auth-form-sub">Sign in to your StadiumIQ account</div>
+        <div class="auth-form-sub">Sign in to your CrowdPulse account</div>
 
         <form class="auth-form" id="signinForm" onsubmit="handleSignIn(event)">
           <div class="auth-field">
@@ -291,7 +291,7 @@
       <!-- ── Sign Up ── -->
       <div id="signupSection" class="auth-section hidden">
         <div class="auth-form-title">Create account ✨</div>
-        <div class="auth-form-sub">Join StadiumIQ — it's completely free</div>
+        <div class="auth-form-sub">Join CrowdPulse — it's completely free</div>
 
         <form class="auth-form" id="signupForm" onsubmit="handleSignUp(event)">
           <div class="auth-field">
@@ -386,7 +386,7 @@
       setTimeout(() => {
         btn.textContent = '✓ Account created!';
         btn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
-        showToast('🎉 Account created! Welcome to StadiumIQ!');
+        showToast('🎉 Account created! Welcome to CrowdPulse!');
         setTimeout(() => window.location.href = 'index.html', 1500);
       }, 1400);
     }

@@ -1,5 +1,5 @@
-// ══════════════════════════════════════════
-//  StadiumIQ — script.js
+﻿// ══════════════════════════════════════════
+//  CrowdPulse — script.js
 // ══════════════════════════════════════════
 
 // ── HERO CANVAS ──────────────────────────
@@ -126,10 +126,10 @@ setInterval(() => {
 }, 2800);
 
 // ── INCIDENT REPORTING — Fetch API ───────────────
-// Meta override: <meta name="stadiumiq-api-base" content="https://your-api.example.com" />
+// Meta override: <meta name="CrowdPulse-api-base" content="https://your-api.example.com" />
 // Empty / omitted: same-origin when the page is served by this app, else localhost:3001 for dev.
-function stadiumiqApiBase() {
-  const meta = document.querySelector('meta[name="stadiumiq-api-base"]');
+function CrowdPulseApiBase() {
+  const meta = document.querySelector('meta[name="CrowdPulse-api-base"]');
   if (meta?.content?.trim()) return meta.content.trim().replace(/\/$/, '');
   if (location.protocol === 'file:') return 'http://localhost:3001';
   const p = location.port;
@@ -137,7 +137,7 @@ function stadiumiqApiBase() {
   if (sameAsServer) return '';
   return 'http://localhost:3001';
 }
-const API = stadiumiqApiBase();
+const API = CrowdPulseApiBase();
 
 // Map each .sopt button's text → backend type value
 const TYPE_MAP = {
@@ -211,7 +211,7 @@ document.querySelectorAll('.spvp-submit, .report-submit').forEach(btn => {
       type:        selectedType,
       zone:        detectZone(),
       seat:        detectSeat(),
-      description: `Fan reported: ${selectedType.replace(/_/g, ' ')} — submitted via StadiumIQ app`,
+      description: `Fan reported: ${selectedType.replace(/_/g, ' ')} — submitted via CrowdPulse app`,
       severity:    getSeverity(selectedType),
       anonymous:   isAnonymous,
       reportedBy:  isAnonymous ? 'Anonymous' : 'Fan App',
@@ -411,7 +411,7 @@ const wbObs = new IntersectionObserver(entries => {
 }, { threshold:.2 });
 document.querySelectorAll('.fcard').forEach(c => wbObs.observe(c));
 
-console.log('%c⚡ StadiumIQ — Smart Stadium Experience System','color:#4f8ef7;font-size:1rem;font-weight:bold;background:#050810;padding:8px 16px;border-radius:8px;');
+console.log('%c⚡ CrowdPulse — Smart Stadium Experience System','color:#4f8ef7;font-size:1rem;font-weight:bold;background:#050810;padding:8px 16px;border-radius:8px;');
 
 // ── SMART SAFETY MAP — IPL India venues ─────
 (function initSmartSafetyMap() {
