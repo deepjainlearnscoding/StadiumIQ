@@ -419,7 +419,22 @@
     /* Hide sign-in/sign-up CTAs when user is already authenticated */
     (function updateHomeForAuthState() {
       var isAuth = localStorage.getItem('crowdpulse_is_authenticated') === 'true';
-      if (!isAuth) return;
+      var fcards = document.querySelectorAll('.fcard-link');
+
+      if (!isAuth) {
+        fcards.forEach(function(card) {
+          card.addEventListener('click', function() {
+            window.location.href = 'auth.html';
+          });
+          card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                window.location.href = 'auth.html';
+            }
+          });
+        });
+        return;
+      }
 
       /* Hero: hide signup button, keep 'Explore Features' */
       var heroBtn = document.getElementById('heroSignupBtn');
@@ -436,6 +451,46 @@
         ctaRow.innerHTML =
           '<a href="profile.html" class="btn-p">My Profile →</a>' +
           '<a href="#features" class="btn-s">Explore Features</a>';
+      }
+
+      /* Unlock all feature cards */
+      var featureUrls = [
+        'navigation.html', // 01 Navigation
+        'heatmap.html',    // 02 Wait-Time
+        'food.html',       // 03 Food
+        'heatmap.html',    // 04 Heatmaps
+        'emergency.html',  // 05 Emergency
+        'security.html',   // 06 Smart Entry
+        'profile.html',    // 07 Personal Notifs
+        'lost-found.html'  // 08 Lost & Found
+      ];
+      
+      fcards.forEach(function(card, index) {
+        card.style.cursor = 'pointer';
+        
+        var exploreBtn = card.querySelector('.fc-explore');
+        if (exploreBtn) {
+          exploreBtn.innerHTML = 'Explore Feature &rarr;';
+          exploreBtn.style.pointerEvents = 'auto';
+        }
+        
+        var targetUrl = featureUrls[index] || 'navigation.html';
+        
+        card.addEventListener('click', function() {
+           window.location.href = targetUrl;
+        });
+        card.addEventListener('keydown', function(e) {
+           if (e.key === 'Enter' || e.key === ' ') {
+               e.preventDefault();
+               window.location.href = targetUrl;
+           }
+        });
+      });
+      
+      /* Update footer Features text */
+      var footerFn = document.querySelector('.fnav .fn span');
+      if (footerFn && footerFn.textContent.includes('Require Sign In')) {
+         footerFn.textContent = 'All Features Unlocked';
       }
     }());
   </script>
