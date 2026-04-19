@@ -1,589 +1,443 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign In — CrowdPulse</title>
-  <meta name="description" content="Sign in or create your CrowdPulse account to access real-time stadium navigation, live heatmaps, and smart fan features." />
+  <title>CrowdPulse — Smart Stadium Experience</title>
+  <meta name="description" content="AI-powered smart stadium system — navigation, crowd intelligence, food ordering, emergency routing and more." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=3" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Outfit', sans-serif; background: #050817; }
+    /* Feature card link override — make whole card clickable */
+    .fcard-link {
+      display: block; text-decoration: none; color: inherit;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .fcard-link:hover { transform: translateY(-4px); }
+    .fcard-link:hover .fcard-inner { box-shadow: 0 20px 60px rgba(0,0,0,.35); }
 
-    .auth-page { min-height: 100vh; display: flex; }
-
-    /* ── Left Branding Panel ── */
-    .auth-brand {
-      flex: 1;
-      background: linear-gradient(135deg, #060c23 0%, #0d1c4e 50%, #060c23 100%);
-      display: flex; flex-direction: column; justify-content: space-between;
-      padding: 2.5rem 3rem; position: relative; overflow: hidden;
+    /* "Explore →" tag inside cards */
+    .fc-explore {
+      display: inline-flex; align-items: center; gap: .35rem;
+      margin-top: 1.1rem; padding: .45rem 1rem;
+      border-radius: 8px; font-size: .82rem; font-weight: 600;
+      transition: background .2s; border: 1px solid;
     }
-    .auth-brand::before {
-      content: ''; position: absolute; top: -15%; left: -15%;
-      width: 75%; height: 75%;
-      background: radial-gradient(circle, rgba(99,102,241,0.22) 0%, transparent 70%);
-      pointer-events: none;
+    .fc-explore.blue  { background: rgba(99,102,241,.13); border-color: rgba(99,102,241,.28); color: rgba(165,180,252,.9); }
+    .fc-explore.cyan  { background: rgba(6,182,212,.1);   border-color: rgba(6,182,212,.25);  color: rgba(103,232,249,.9); }
+    .fc-explore.green { background: rgba(34,197,94,.1);   border-color: rgba(34,197,94,.25);  color: rgba(74,222,128,.9); }
+    .fc-explore.purple{ background: rgba(139,92,246,.1);  border-color: rgba(139,92,246,.25); color: rgba(196,181,253,.9); }
+    .fc-explore.red   { background: rgba(239,68,68,.1);   border-color: rgba(239,68,68,.25);  color: rgba(252,165,165,.9); }
+    .fc-explore.yellow{ background: rgba(234,179,8,.1);   border-color: rgba(234,179,8,.25);  color: rgba(250,204,21,.9); }
+    .fc-glow.yellow   { background: radial-gradient(circle,rgba(234,179,8,.22),transparent 70%); }
+    /* How It Works compact */
+    .hiw-compact { padding: 4.5rem 0; background: transparent; }
+    .hiw-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+    .hiw-step {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px; padding: 1.5rem; text-align: center; transition: all .3s;
     }
-    .auth-brand::after {
-      content: ''; position: absolute; bottom: -10%; right: -10%;
-      width: 65%; height: 65%;
-      background: radial-gradient(circle, rgba(6,182,212,0.14) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .auth-brand-logo {
-      display: flex; align-items: center; gap: 0.6rem; text-decoration: none; z-index: 1;
-    }
-    .auth-brand-logo .logo-icon { font-size: 1.7rem; }
-    .auth-brand-logo .logo-text { font-size: 1.45rem; font-weight: 800; color: white; letter-spacing: -0.02em; }
-
-    .auth-brand-main { position: relative; z-index: 1; }
-    .auth-brand-main h2 {
-      font-size: clamp(2rem, 3vw, 3rem); font-weight: 800; color: white;
-      line-height: 1.15; margin-bottom: 1rem;
-    }
-    .auth-brand-main p { color: rgba(255,255,255,0.6); font-size: 1rem; line-height: 1.65; max-width: 400px; }
-
-    /* Floating stadium graphic */
-    .auth-stadium-anim {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 380px; height: 220px; pointer-events: none; z-index: 0;
-    }
-    .asa-ring {
-      position: absolute; border-radius: 50%;
-      border: 1px solid rgba(99,102,241,0.2);
-      animation: ringSpin 20s linear infinite;
-    }
-    .asa-ring:nth-child(1) { width: 320px; height: 140px; top: 40px; left: 30px; }
-    .asa-ring:nth-child(2) { width: 240px; height: 100px; top: 60px; left: 70px; border-color: rgba(6,182,212,0.15); animation-duration: 14s; animation-direction: reverse; }
-    .asa-ring:nth-child(3) { width: 160px; height: 70px; top: 75px; left: 110px; border-color: rgba(99,102,241,0.1); animation-duration: 9s; }
-    .asa-dot {
-      position: absolute; width: 6px; height: 6px; border-radius: 50%;
-      background: rgba(99,102,241,0.6);
-      animation: dotPulse 2.5s ease-in-out infinite;
-    }
-    .asa-dot:nth-child(4) { top: 40px; left: 190px; }
-    .asa-dot:nth-child(5) { top: 140px; left: 100px; background: rgba(6,182,212,0.6); animation-delay: 0.8s; }
-    .asa-dot:nth-child(6) { top: 90px; left: 300px; animation-delay: 1.6s; }
-    @keyframes ringSpin { to { transform: rotate(360deg); } }
-    @keyframes dotPulse { 0%,100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 1; transform: scale(1.6); } }
-
-    .auth-brand-features { display: flex; flex-direction: column; gap: 0.85rem; position: relative; z-index: 1; }
-    .auth-feat {
-      display: flex; align-items: center; gap: 0.9rem;
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 12px; padding: 0.85rem 1.1rem; backdrop-filter: blur(8px);
-      transition: background 0.2s;
-    }
-    .auth-feat:hover { background: rgba(255,255,255,0.08); }
-    .auth-feat-icon { font-size: 1.35rem; flex-shrink: 0; }
-    .auth-feat div strong { display: block; color: white; font-weight: 600; font-size: 0.875rem; }
-    .auth-feat div span { color: rgba(255,255,255,0.5); font-size: 0.78rem; }
-
-    /* ── Right Form Panel ── */
-    .auth-form-panel {
-      width: 500px; flex-shrink: 0; background: #07101f;
-      display: flex; flex-direction: column; justify-content: center;
-      padding: 3rem 3.5rem; position: relative; overflow: hidden;
-    }
-    .auth-form-panel::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: radial-gradient(ellipse at top right, rgba(99,102,241,0.07) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    .auth-back-link {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.82rem;
-      margin-bottom: 2.25rem; transition: color 0.2s; width: fit-content;
-    }
-    .auth-back-link:hover { color: rgba(255,255,255,0.75); }
-
-    /* Toggle */
-    .auth-toggle {
-      display: flex; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 12px; padding: 4px; margin-bottom: 1.75rem;
-    }
-    .auth-toggle-btn {
-      flex: 1; padding: 0.6rem 1rem; border: none; background: transparent;
-      color: rgba(255,255,255,0.45); font-family: 'Outfit', sans-serif;
-      font-size: 0.9rem; font-weight: 500; border-radius: 9px;
-      cursor: pointer; transition: all 0.3s ease;
-    }
-    .auth-toggle-btn.active {
-      background: linear-gradient(135deg, #6366f1, #06b6d4);
-      color: white; font-weight: 700;
-    }
-
-    /* Section titles */
-    .auth-section { display: block; }
-    .auth-section.hidden { display: none; }
-    .auth-form-title { font-size: 1.7rem; font-weight: 800; color: white; margin-bottom: 0.3rem; }
-    .auth-form-sub { color: rgba(255,255,255,0.42); font-size: 0.875rem; margin-bottom: 1.6rem; }
-
-    /* Fields */
-    .auth-form { display: flex; flex-direction: column; gap: 0.9rem; }
-    .auth-field label {
-      display: block; color: rgba(255,255,255,0.55); font-size: 0.75rem;
-      font-weight: 600; margin-bottom: 0.35rem; letter-spacing: 0.04em; text-transform: uppercase;
-    }
-    .auth-field input {
-      width: 100%; padding: 0.8rem 1rem;
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.11);
-      border-radius: 10px; color: white; font-family: 'Outfit', sans-serif;
-      font-size: 0.92rem; outline: none; transition: all 0.2s;
-    }
-    .auth-field input::placeholder { color: rgba(255,255,255,0.22); }
-    .auth-field input:focus {
-      border-color: rgba(99,102,241,0.55); background: rgba(99,102,241,0.07);
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
-    }
-
-    .auth-input-wrap { position: relative; display: block; }
-    .auth-pw-toggle {
-      position: absolute; right: 0.8rem; top: 50%; transform: translateY(-50%);
-      background: transparent; border: none; padding: 0.2rem; cursor: pointer;
-      color: rgba(255,255,255,0.35); transition: color 0.2s;
+    .hiw-step:hover { background: rgba(255,255,255,.07); border-color: rgba(99,102,241,.2); transform: translateY(-2px); }
+    .hiw-step-num {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: linear-gradient(135deg,#6366f1,#06b6d4);
       display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: .85rem; color: white; margin: 0 auto .9rem;
     }
-    .auth-pw-toggle:hover { color: rgba(255,255,255,0.75); }
-    .auth-input-wrap input { padding-right: 2.5rem; }
+    .hiw-step-icon { font-size: 1.75rem; margin-bottom: .6rem; }
+    .hiw-step h4 { color: white; font-weight: 700; font-size: .95rem; margin-bottom: .35rem; }
+    .hiw-step p { color: rgba(255,255,255,.48); font-size: .8rem; line-height: 1.55; }
 
-    .auth-field-row { display: flex; justify-content: space-between; align-items: center; }
-    .auth-checkbox-row { display: flex; align-items: center; gap: 0.5rem; }
-    .auth-checkbox-row input[type="checkbox"] { width: 15px; height: 15px; accent-color: #6366f1; cursor: pointer; }
-    .auth-checkbox-row label { color: rgba(255,255,255,0.5); font-size: 0.8rem; cursor: pointer; }
-    .auth-checkbox-row label a { color: rgba(99,102,241,0.85); text-decoration: none; }
-    .auth-forgot { color: rgba(99,102,241,0.8); font-size: 0.8rem; text-decoration: none; transition: color 0.2s; }
-    .auth-forgot:hover { color: #6366f1; }
-
-    /* Submit button */
-    .auth-submit {
-      width: 100%; padding: 0.875rem; margin-top: 0.4rem;
-      background: linear-gradient(135deg, #6366f1, #06b6d4);
-      border: none; border-radius: 10px; color: white;
-      font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700;
-      cursor: pointer; transition: opacity 0.2s, transform 0.15s; letter-spacing: 0.01em;
+    /* CTA banner */
+    .cta-banner {
+      padding: 4rem 0; background: transparent;
+      text-align: center; position: relative; overflow: hidden;
     }
-    .auth-submit:hover { opacity: 0.88; transform: translateY(-1px); }
-    .auth-submit:active { transform: translateY(0); }
-
-    /* Divider */
-    .auth-divider {
-      display: flex; align-items: center; gap: 0.85rem;
-      color: rgba(255,255,255,0.22); font-size: 0.78rem; margin: 0.5rem 0;
-    }
-    .auth-divider::before, .auth-divider::after {
-      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.09);
-    }
-
-    /* Social */
-    .auth-social { display: flex; gap: 0.6rem; }
-    .auth-social-btn {
-      flex: 1; padding: 0.7rem; background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
-      color: white; font-family: 'Outfit', sans-serif; font-size: 0.85rem;
-      font-weight: 500; cursor: pointer; transition: all 0.2s;
-      display: flex; align-items: center; justify-content: center; gap: 0.45rem;
-    }
-    .auth-social-btn:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.18); }
-
-    .auth-switch { text-align: center; color: rgba(255,255,255,0.38); font-size: 0.85rem; margin-top: 1.1rem; }
-    .auth-switch a { color: rgba(99,102,241,0.9); font-weight: 600; cursor: pointer; text-decoration: none; }
-    .auth-switch a:hover { color: #6366f1; }
-
-    /* Toast */
-    .auth-toast {
-      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px);
-      background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3);
-      backdrop-filter: blur(12px); color: white; padding: 0.85rem 1.5rem;
-      border-radius: 12px; font-size: 0.9rem; font-weight: 600;
-      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-      z-index: 9999; pointer-events: none;
-    }
-    .auth-toast.show { transform: translateX(-50%) translateY(0); }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      .auth-brand { display: none; }
-      .auth-form-panel { width: 100%; padding: 2rem 1.5rem; }
-    }
+    .cta-banner::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 300px; background: radial-gradient(ellipse, rgba(99,102,241,.12) 0%, transparent 70%); pointer-events: none; }
+    .cta-banner h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; color: white; margin-bottom: .75rem; }
+    .cta-banner p { color: rgba(255,255,255,.55); font-size: 1rem; margin-bottom: 2rem; max-width: 480px; margin-left: auto; margin-right: auto; }
+    .cta-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
   </style>
 </head>
 <body>
-  <div class="auth-page">
-
-    <!-- ── Left Branding Panel ── -->
-    <div class="auth-brand">
-      <a href="home.html" class="auth-brand-logo">
-        <img src="assets/logo.png" alt="CrowdPulse Logo" style="width:32px;height:32px;object-fit:contain;border-radius:6px;">
-        <span class="logo-text">CrowdPulse</span>
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:.45rem;color:inherit">
+        <img src="assets/logo.png" alt="CrowdPulse Logo" style="width:32px;height:32px;object-fit:contain;border-radius:6px;"><span class="logo-text">CrowdPulse</span>
       </a>
+    </div>
+    <ul class="nav-links" style="display:none;">
+    </ul>
+    <div class="nav-actions" style="display:flex;align-items:center;gap:.6rem;flex-shrink:0">
+      <a href="auth.html" style="padding:.45rem .9rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:8px;color:rgba(255,255,255,.8);text-decoration:none;font-size:.85rem;font-weight:500;transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.12)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">Sign In</a>
+      <a href="auth.html?mode=signup" class="nav-cta">Get Started</a>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
 
-      <!-- Animated stadium rings -->
-      <div class="auth-stadium-anim">
-        <div class="asa-ring"></div>
-        <div class="asa-ring"></div>
-        <div class="asa-ring"></div>
-        <div class="asa-dot"></div>
-        <div class="asa-dot"></div>
-        <div class="asa-dot"></div>
-      </div>
+  <!-- HERO -->
+  <section id="hero">
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-grid-overlay"></div>
 
-      <div class="auth-brand-main">
-        <h2>One App.<br /><span class="gtext">Every Experience.</span></h2>
-        <p>Join 80,000+ fans experiencing AI-powered stadium intelligence — smarter navigation, zero queues, instant safety alerts.</p>
-      </div>
+    <div class="hero-widget hw-right">
+      <div class="w-head"><span class="ldot"></span> Live Heatmap</div>
+      <div class="mini-hm" id="heroHeatmap"></div>
+      <div class="w-foot">Gate A · North Stand · Zone 7</div>
+    </div>
 
-      <div class="auth-brand-features">
-        <div class="auth-feat"><div class="auth-feat-icon">📍</div><div><strong>Indoor Navigation</strong><span>Sub-2m GPS accuracy — never get lost</span></div></div>
-        <div class="auth-feat"><div class="auth-feat-icon">🌡️</div><div><strong>Live Crowd Heatmaps</strong><span>Real-time density updated every 5 seconds</span></div></div>
-        <div class="auth-feat"><div class="auth-feat-icon">🍔</div><div><strong>Skip the Queue</strong><span>Pre-order food from your seat</span></div></div>
-        <div class="auth-feat"><div class="auth-feat-icon">🚨</div><div><strong>Emergency Routing</strong><span>Safest exit path in any situation</span></div></div>
+    <div class="hero-widget hw-left">
+      <div class="w-head">⏱ Wait Times</div>
+      <div class="wait-rows">
+        <div class="wr"><span>Gate 3</span><span class="wt red">12 min</span></div>
+        <div class="wr"><span>Gate 5</span><span class="wt green">3 min</span></div>
+        <div class="wr"><span>Food Court A</span><span class="wt yellow">7 min</span></div>
       </div>
     </div>
 
-    <!-- ── Right Form Panel ── -->
-    <div class="auth-form-panel">
-      <div style="display: flex; justify-content: flex-end; width: 100%;">
-        <a href="home.html" class="auth-back-link" style="margin-bottom: 2rem;">Skip / Continue as guest →</a>
+    <div class="hero-content">
+
+      <h1 class="hero-title">One App.<br /><span class="gtext">Every Experience.</span></h1>
+      <p class="hero-sub">
+        AI-powered smart stadium system that eliminates chaos —
+        real-time navigation, crowd intelligence, instant food ordering,
+        and emergency routing all in one seamless platform.
+      </p>
+      <div class="hero-chips">
+        <span class="chip">📍 Indoor Navigation</span>
+        <span class="chip">🌡️ Live Heatmaps</span>
+        <span class="chip">⏱ Wait Prediction</span>
+        <span class="chip">🍔 Smart Ordering</span>
+        <span class="chip">🚨 Emergency Routing</span>
       </div>
-      <!-- Toggle tabs -->
-      <div class="auth-toggle">
-        <button class="auth-toggle-btn active" id="signinTab" onclick="switchAuth('signin')">Sign In</button>
-        <button class="auth-toggle-btn" id="signupTab" onclick="switchAuth('signup')">Sign Up</button>
-      </div>
-
-      <!-- ── Sign In ── -->
-      <div id="signinSection" class="auth-section">
-        <div class="auth-form-title">Welcome back 👋</div>
-        <div class="auth-form-sub">Sign in to your CrowdPulse account</div>
-
-        <form class="auth-form" id="signinForm">
-          <div class="auth-field">
-            <label for="si-email">Email Address</label>
-            <input type="email" id="si-email" placeholder="you@example.com" required />
-          </div>
-          <div class="auth-field">
-            <label for="si-password">Password</label>
-            <div class="auth-input-wrap">
-              <input type="password" id="si-password" placeholder="Enter your password" required />
-              <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('si-password', this)" aria-label="Toggle password visibility" title="Show password">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-              </button>
-            </div>
-          </div>
-          <div id="si-email-err" style="color:#f87171;font-size:.8rem;margin-top:-.2rem;display:none;"></div>
-          <div id="si-pass-err"  style="color:#f87171;font-size:.8rem;margin-top:-.2rem;display:none;"></div>
-          <div class="auth-field-row">
-            <div class="auth-checkbox-row">
-              <input type="checkbox" id="si-remember" />
-              <label for="si-remember">Remember me</label>
-            </div>
-            <a href="#" class="auth-forgot">Forgot password?</a>
-          </div>
-          <button type="submit" class="auth-submit" id="si-btn">Sign In →</button>
-          <p style="text-align:center;color:rgba(255,255,255,.38);font-size:.8rem;margin-top:.4rem">
-            New here? <a onclick="switchAuth('signup')" style="color:rgba(99,102,241,.9);font-weight:600;cursor:pointer">Create a free account first →</a>
-          </p>
-        </form>
-
-        <div class="auth-divider">or continue with</div>
-        <div class="auth-social">
-          <button class="auth-social-btn" id="si-google" onclick="socialLogin(this,'Google')">
-            <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-            Google
-          </button>
-          <button class="auth-social-btn" id="si-apple" onclick="socialLogin(this,'Apple')">
-            <svg width="15" height="17" viewBox="0 0 24 24" fill="white"><path d="M16.125 1c.09 1.016-.285 2.03-.938 2.766-.652.734-1.664 1.23-2.648 1.148-.117-.965.348-1.98.965-2.648C14.133 1.566 15.18 1.07 16.125 1zm3.375 16.055c-.469.703-.977 1.367-1.652 1.914-.516.41-1.055.703-1.699.703-.7 0-1.18-.41-2.063-.41-.926 0-1.465.41-2.132.41-.644 0-1.21-.293-1.758-.75C9.621 18.31 9 17.176 8.508 16c-.672-1.621-1.012-3.328-1.012-4.926 0-2.695 1.758-4.16 3.44-4.16.91 0 1.68.586 2.273.586.563 0 1.434-.615 2.5-.615.41 0 1.582.047 2.52.938-.07.047-1.523.867-1.523 2.695 0 2.168 1.875 2.93 1.875 2.93C18.42 14.535 19.5 15.313 19.5 17.055z"/></svg>
-            Apple
-          </button>
-        </div>
-
-        <div class="auth-switch">
-          Don't have an account? <a onclick="switchAuth('signup')">Sign up free</a>
-        </div>
-      </div>
-
-      <!-- ── Sign Up ── -->
-      <div id="signupSection" class="auth-section hidden">
-        <div class="auth-form-title">Create account ✨</div>
-        <div class="auth-form-sub">Join CrowdPulse — it's completely free</div>
-
-        <form class="auth-form" id="signupForm">
-          <div class="auth-field">
-            <label for="su-name">Full Name</label>
-            <input type="text" id="su-name" placeholder="Your full name" required />
-          </div>
-          <div class="auth-field">
-            <label for="su-email">Email Address</label>
-            <input type="email" id="su-email" placeholder="you@example.com" required />
-          </div>
-          <div class="auth-field">
-            <label for="su-password">Password</label>
-            <div class="auth-input-wrap">
-              <input type="password" id="su-password" placeholder="Create a strong password" required minlength="8" />
-              <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('su-password', this)" aria-label="Toggle password visibility" title="Show password">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-              </button>
-            </div>
-          </div>
-          <div class="auth-field">
-            <label for="su-confirm">Confirm Password</label>
-            <div class="auth-input-wrap">
-              <input type="password" id="su-confirm" placeholder="Repeat your password" required />
-              <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('su-confirm', this)" aria-label="Toggle password visibility" title="Show password">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-              </button>
-            </div>
-          </div>
-          <div class="auth-checkbox-row">
-            <input type="checkbox" id="su-terms" required />
-            <label for="su-terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
-          </div>
-          <button type="submit" class="auth-submit" id="su-btn">Create Account →</button>
-        </form>
-
-        <div class="auth-divider">or sign up with</div>
-        <div class="auth-social">
-          <button class="auth-social-btn" id="su-google" onclick="socialLogin(this,'Google')">
-            <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-            Google
-          </button>
-          <button class="auth-social-btn" id="su-apple" onclick="socialLogin(this,'Apple')">
-            <svg width="15" height="17" viewBox="0 0 24 24" fill="white"><path d="M16.125 1c.09 1.016-.285 2.03-.938 2.766-.652.734-1.664 1.23-2.648 1.148-.117-.965.348-1.98.965-2.648C14.133 1.566 15.18 1.07 16.125 1zm3.375 16.055c-.469.703-.977 1.367-1.652 1.914-.516.41-1.055.703-1.699.703-.7 0-1.18-.41-2.063-.41-.926 0-1.465.41-2.132.41-.644 0-1.21-.293-1.758-.75C9.621 18.31 9 17.176 8.508 16c-.672-1.621-1.012-3.328-1.012-4.926 0-2.695 1.758-4.16 3.44-4.16.91 0 1.68.586 2.273.586.563 0 1.434-.615 2.5-.615.41 0 1.582.047 2.52.938-.07.047-1.523.867-1.523 2.695 0 2.168 1.875 2.93 1.875 2.93C18.42 14.535 19.5 15.313 19.5 17.055z"/></svg>
-            Apple
-          </button>
-        </div>
-
-        <div class="auth-switch">
-          Already have an account? <a onclick="switchAuth('signin')">Sign in</a>
-        </div>
+      <div class="hero-cta" id="heroCta">
+        <a href="auth.html?mode=signup" id="heroSignupBtn" class="btn-p">Get Started Free <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="#features" class="btn-s">Explore Features</a>
       </div>
     </div>
-  </div>
 
-  <!-- Toast -->
-  <div class="auth-toast" id="authToast"></div>
+    <div class="scroll-hint"><div class="sw"></div><span>Scroll to explore</span></div>
+  </section>
 
+  <!-- FEATURES GRID -->
+  <section id="features" class="section">
+    <div class="container">
+      <div class="sec-hd">
+        <span class="stag">Key Features</span>
+        <h2>Everything a Fan Needs,<br /><span class="gtext">Perfectly Intelligent</span></h2>
+        <p>7 powerful systems working together to transform every moment inside the stadium. Click any feature to explore it in detail.</p>
+      </div>
+
+      <div class="feat-grid">
+
+        <!-- F1 Navigation -->
+        <div class="fcard-link span2" tabindex="0">
+          <div class="fcard fc-blue fcard-inner" style="margin:0">
+            <div class="fc-glow blue"></div>
+            <div class="fc-top"><span class="fcn">01</span><span class="fci">📍</span></div>
+            <h3>Smart Navigation</h3>
+            <p>Google Maps for stadiums — indoor GPS using BLE beacons with sub-2m accuracy. Turn-by-turn directions to your seat, washroom, food stall, or exit, auto-routing around crowded zones.</p>
+            <div class="fc-tags">
+              <span class="ftag">Turn-by-turn indoor nav</span>
+              <span class="ftag">Least-crowded routes</span>
+              <span class="ftag">Accessibility paths</span>
+              <span class="ftag">BLE + WiFi triangulation</span>
+            </div>
+            <div class="tech-row">
+              <span class="tc">BLE Beacons</span><span class="tc">WiFi Triangulation</span><span class="tc">Mapbox Indoor</span><span class="tc">A* Pathfinding</span>
+            </div>
+            <div class="fc-explore blue" style="pointer-events:none;">🔒 Sign In to Access</div>
+          </div>
+        </div>
+
+        <!-- F2 Wait Times -->
+        <div class="fcard-link" tabindex="0">
+          <div class="fcard fcard-inner" style="margin:0">
+            <div class="fc-glow cyan"></div>
+            <div class="fc-top"><span class="fcn">02</span><span class="fci">⏱️</span></div>
+            <h3>Live Wait-Time Prediction</h3>
+            <p>AI estimates queue lengths at every gate, food stall, and washroom — updated every 30 seconds from computer vision on CCTV feeds.</p>
+            <div class="wait-bars">
+              <div class="wbar-row"><span>Gate 3</span><div class="wbar"><div class="wbfill" style="--w:75%;--c:#ef4444"></div></div><span class="wval red">12m</span></div>
+              <div class="wbar-row"><span>Gate 5</span><div class="wbar"><div class="wbfill" style="--w:20%;--c:#22c55e"></div></div><span class="wval green">3m</span></div>
+              <div class="wbar-row"><span>Food A</span><div class="wbar"><div class="wbfill" style="--w:45%;--c:#f59e0b"></div></div><span class="wval yellow">7m</span></div>
+            </div>
+            <div class="tech-row"><span class="tc">CCTV AI</span><span class="tc">Computer Vision</span><span class="tc">ML Models</span></div>
+            <div class="fc-explore cyan" style="pointer-events:none;">🔒 Sign In to Access</div>
+          </div>
+        </div>
+
+        <!-- F3 Food -->
+        <div class="fcard-link" tabindex="0">
+          <div class="fcard fcard-inner" style="margin:0">
+            <div class="fc-glow green"></div>
+            <div class="fc-top"><span class="fcn">03</span><span class="fci">🍔</span></div>
+            <h3>Pre-Order &amp; Smart Pickup</h3>
+            <p>Order from your seat, choose a pickup slot, and skip the queue entirely. App suggests the least-crowded stall near you.</p>
+            <ul class="fc-list">
+              <li>Order from any stall in-app</li>
+              <li>Time-slot pickup scheduling</li>
+              <li>Least-crowded stall suggestions</li>
+              <li>Live preparation tracking</li>
+            </ul>
+            <div class="tech-row"><span class="tc">Firebase RT</span><span class="tc">Node.js</span><span class="tc">Slot Scheduler</span></div>
+            <div class="fc-explore green" style="pointer-events:none;">🔒 Sign In to Access</div>
+          </div>
+        </div>
+
+        <!-- F4 Heatmaps -->
+        <div class="fcard-link span2" tabindex="0">
+          <div class="fcard fc-special fcard-inner" style="margin:0" id="heatmap">
+            <div class="fc-glow purple"></div>
+            <div class="fc-top"><span class="fcn">04</span><span class="fci">🌡️</span></div>
+            <h3>Live Crowd Heatmaps <span class="imp-tag">Most Important</span></h3>
+            <p>Real-time color-coded density overlay on the stadium map — updated every 5 seconds from sensors and CCTV. Fans avoid crowds, admins control flow.</p>
+            <div class="heatmap-demo">
+              <div class="hm-stadium">
+                <div class="hm-field"></div>
+                <div class="hm-zone hz-red"  style="top:4%;left:4%;width:28%;height:22%"><span>N · High</span></div>
+                <div class="hm-zone hz-yellow" style="top:4%;right:4%;width:28%;height:22%"><span>NE · Med</span></div>
+                <div class="hm-zone hz-green" style="top:32%;left:4%;width:22%;height:30%"><span>W · Free</span></div>
+                <div class="hm-zone hz-red"  style="top:32%;right:4%;width:22%;height:30%"><span>E · High</span></div>
+                <div class="hm-zone hz-green" style="bottom:4%;left:18%;width:28%;height:20%"><span>S · Free</span></div>
+                <div class="hm-zone hz-yellow" style="bottom:4%;right:18%;width:22%;height:20%"><span>SE · Med</span></div>
+              </div>
+              <div class="hm-legend-block">
+                <div class="hlb"><span class="hlb-dot red"></span><strong>Red</strong><span>Overcrowded — avoid</span></div>
+                <div class="hlb"><span class="hlb-dot yellow"></span><strong>Yellow</strong><span>Moderate — proceed with care</span></div>
+                <div class="hlb"><span class="hlb-dot green"></span><strong>Green</strong><span>Free — best experience</span></div>
+                <div class="hm-uses">
+                  <div class="hmu"><div class="hmu-icon">👤</div><div><strong>Fans</strong><p>Avoid crowds, find free zones</p></div></div>
+                  <div class="hmu"><div class="hmu-icon">🛡️</div><div><strong>Admins</strong><p>Control crowd flow, prevent surge</p></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="tech-row"><span class="tc">IoT Sensors</span><span class="tc">CCTV AI</span><span class="tc">WebSockets</span><span class="tc">Canvas Render</span></div>
+            <div class="fc-explore purple" style="pointer-events:none;">🔒 Sign In to Access</div>
+          </div>
+        </div>
+
+        <!-- F5 Emergency -->
+        <div class="fcard-link" tabindex="0">
+          <div class="fcard fc-red fcard-inner" style="margin:0">
+            <div class="fc-glow red"></div>
+            <div class="fc-top"><span class="fcn">05</span><span class="fci">🚨</span></div>
+            <h3>Emergency Smart Routing</h3>
+            <p>In any emergency — fire, stampede, or medical — the system instantly notifies every user and computes the safest, least-congested evacuation path.</p>
+            <ul class="fc-list">
+              <li>Mass push alerts with vibration</li>
+              <li>Dynamic evacuation re-routing</li>
+              <li>Nearest safe exit guidance</li>
+              <li>Synced with stadium security</li>
+            </ul>
+            <span class="ftag red">Critical Safety</span>
+            <div class="fc-explore red" style="display:block;margin-top:.75rem;pointer-events:none;">🔒 Sign In to Access</div>
+          </div>
+        </div>
+
+        <!-- F6 Smart Entry -->
+        <div class="fcard-link" tabindex="0">
+          <div class="fcard fcard-inner" style="margin:0">
+            <div class="fc-glow blue"></div>
+            <div class="fc-top"><span class="fcn">06</span><span class="fci">🎟️</span></div>
+            <h3>Smart Entry System</h3>
+            <p>QR + optional face recognition for 2-second entry. AI predicts crowd arrival waves and dynamically opens or redirects gates before surges hit.</p>
+            <ul class="fc-list">
+              <li>QR + face recognition (optional)</li>
+              <li>2-second scan &amp; entry</li>
+              <li>Crowd surge pre-prediction</li>
+              <li>Dynamic gate open/close control</li>
+            </ul>
+            <div class="tech-row"><span class="tc">OpenCV</span><span class="tc">LSTM Models</span><span class="tc">Gate IoT</span></div>
+            <div class="fc-explore blue" style="pointer-events:none;">🔒 Sign In to Access</div>
+          </div>
+        </div>
+
+        <!-- F7 Personalized Notifs -->
+        <div class="fcard-link span2" tabindex="0">
+          <div class="fcard fcard-inner" style="margin:0">
+            <div class="fc-glow purple"></div>
+            <div class="fc-top"><span class="fcn">07</span><span class="fci">📢</span></div>
+            <h3>Personalized Notifications</h3>
+            <p>Context-aware alerts based on your real-time location, seat, and preferences — nudging you to the best gate, stall, or route at exactly the right moment.</p>
+            <div class="notif-examples">
+              <div class="ne"><span class="ne-icon">🚪</span><span>"Your gate is crowded — switch to Gate 2 for 3 min entry"</span></div>
+              <div class="ne"><span class="ne-icon">🍟</span><span>"Stall B near you has zero queue right now!"</span></div>
+              <div class="ne"><span class="ne-icon">⚽</span><span>"Match starts in 8 min — head to your seat via Route C"</span></div>
+              <div class="ne"><span class="ne-icon">🚽</span><span>"Washroom on Level 2 is free — Level 3 has 9 min wait"</span></div>
+            </div>
+            <div class="tech-row"><span class="tc">FCM Push</span><span class="tc">Location API</span><span class="tc">Recommendation Engine</span><span class="tc">Real-time Rules</span></div>
+            <div class="fc-explore purple" style="pointer-events:none;">🔒 Sign In to Access</div>
+          </div>
+        </div>
+
+        <!-- F8 Lost & Found -->
+        <div class="fcard-link" tabindex="0">
+          <div class="fcard fcard-inner" style="margin:0">
+            <div class="fc-glow yellow"></div>
+            <div class="fc-top"><span class="fcn">08</span><span class="fci">🎒</span></div>
+            <h3>Lost & Found</h3>
+            <p>A digital bulletin board and reporting system to instantly log missing items or verify recovered belongings.</p>
+            <ul class="fc-list">
+              <li>Upload item images</li>
+              <li>Tag exact locations</li>
+              <li>Live found-item board</li>
+              <li>Secure claiming</li>
+            </ul>
+            <div class="tech-row"><span class="tc">Cloud Sync</span><span class="tc">Forms</span></div>
+            <div class="fc-explore yellow" style="pointer-events:none;">🔒 Sign In to Access</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- DEMO -->
+  <section id="demo" class="section">
+    <div class="container">
+      <div class="sec-hd">
+        <span class="stag">UI Preview</span>
+        <h2>The App That <span class="gtext">Runs It All</span></h2>
+        <p>Modern, intuitive, built for 80,000 fans simultaneously.</p>
+      </div>
+      <div class="phone-showcase">
+
+        <!-- Phone 1: Navigation -->
+        <div class="phone-wrap left-phone" data-delay="0">
+          <div class="phone-label">Smart Navigation</div>
+          <div class="phone-frame">
+            <div class="phone-screen nav-screen">
+              <div class="s-hdr"><div class="back">‹</div><span>Navigation</span><div class="more">⋮</div></div>
+              <div class="nav-map">
+                <div class="mg">
+                  <div class="mz crowded" style="top:10%;left:8%;width:32%;height:24%">Zone A</div>
+                  <div class="mz moderate" style="top:10%;left:50%;width:34%;height:20%">Zone B</div>
+                  <div class="mz free" style="top:42%;left:18%;width:26%;height:30%">Zone C</div>
+                  <div class="mz moderate" style="top:48%;left:54%;width:30%;height:26%">Zone D</div>
+                  <div class="route-svg"></div>
+                  <div class="udot"></div>
+                  <div class="ddot"></div>
+                </div>
+              </div>
+              <div class="nav-bar">
+                <div><div class="nav-eta">4 min</div><div class="nav-to">to Seat 47B · Row 12</div></div>
+                <div class="rtag grn">Optimal Route</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone 2: Heatmap Center -->
+        <div class="phone-wrap center-phone" data-delay="200">
+          <div class="phone-label">Live Heatmap</div>
+          <div class="phone-frame main-frame">
+            <div class="phone-screen hm-screen">
+              <div class="s-hdr dark-hdr"><span class="st">CrowdPulse</span><div class="lchip"><span class="ld"></span>LIVE</div></div>
+              <div class="hm-view">
+                <div class="hm-field-sm"></div>
+                <div class="hm-cz cz1"></div>
+                <div class="hm-cz cz2"></div>
+                <div class="hm-cz cz3"></div>
+                <div class="hm-cz cz4"></div>
+                <div class="hm-cz cz5"></div>
+                <div class="hm-leg"><span class="hl g">Low</span><span class="hl y">Med</span><span class="hl r">High</span></div>
+              </div>
+              <div class="hm-stats">
+                <div class="hms"><span class="hn">41,200</span><span class="hl2">Fans inside</span></div>
+                <div class="hms"><span class="hn">73%</span><span class="hl2">Capacity</span></div>
+                <div class="hms"><span class="hn teal">5s</span><span class="hl2">Update</span></div>
+              </div>
+              <div class="bnav">
+                <div class="bni active">🗺️<span>Map</span></div>
+                <div class="bni">🍔<span>Order</span></div>
+                <div class="bni">⏱️<span>Waits</span></div>
+                <div class="bni">🔔<span>Alerts</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone 3: Food Order -->
+        <div class="phone-wrap right-phone" data-delay="400">
+          <div class="phone-label">Food Ordering</div>
+          <div class="phone-frame">
+            <div class="phone-screen food-screen">
+              <div class="s-hdr"><div class="back">‹</div><span>Order Food</span><div class="cart">🛒</div></div>
+              <div class="food-list">
+                <div class="fi"><span class="fe">🍕</span><div class="finfo"><strong>Pizza Slice</strong><small>Pickup 18:45 · Stall 4</small></div><button class="fab">+</button></div>
+                <div class="fi"><span class="fe">🍟</span><div class="finfo"><strong>Fries Large</strong><small>Pickup 18:45 · Stall 2</small></div><button class="fab">+</button></div>
+                <div class="fi fi-done"><span class="fe">🥤</span><div class="finfo"><strong>Cola 500ml</strong><small>✓ Added to order</small></div><button class="fab done">✓</button></div>
+                <div class="fi"><span class="fe">🌮</span><div class="finfo"><strong>Taco Combo</strong><small>Pickup 19:00 · Stall 7</small></div><button class="fab">+</button></div>
+                <div class="stall-tip">💡 Stall 6 near you — zero queue!</div>
+              </div>
+              <div class="order-bar"><div class="oi">1 item · <strong>₹180</strong></div><button class="checkout">Checkout</button></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BOTTOM -->
+  <section class="cta-banner" id="ctaBanner">
+    <div class="container">
+      <h2 id="ctaTitle">Ready to <span class="gtext">Experience CrowdPulse?</span></h2>
+      <p id="ctaSubtitle">Create a free account or explore all features as a guest — no app download required.</p>
+      <div class="cta-row" id="ctaRow">
+        <a href="auth.html?mode=signup" class="btn-p" id="ctaSignupBtn">Create Free Account <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="auth.html" class="btn-s" id="ctaSigninBtn">Sign In</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="container footer-in">
+      <div class="fb">
+        <div class="flogo"><img src="assets/logo.png" alt="CrowdPulse" style="width:22px;height:22px;vertical-align:middle;object-fit:contain;border-radius:4px;"> CrowdPulse</div>
+        <p>Smart Stadium Experience System</p>
+        <div class="fbadges"><span class="fb2">🏆 Smart Cities</span><span class="fb2">🤖 AI/ML</span><span class="fb2">🏥 Medical</span><span class="fb2">📡 IoT</span></div>
+      </div>
+      <div class="fnav">
+        <div class="fn"><strong>Features</strong><span>Require Sign In to Access</span></div>
+        <div class="fn"><strong>Account</strong><a href="auth.html">Sign In</a><a href="auth.html?mode=signup">Sign Up</a></div>
+      </div>
+    </div>
+    <div class="fbot">© 2026 CrowdPulse. All rights reserved.</div>
+  </footer>
+
+  <!-- NOTIFICATION CENTER SCRIPT AND MAIN SCRIPT CACHE BUSTED -->
+  <script src="js/script.js?v=3"></script>
+  <script src="js/auth-nav.js"></script>
   <script>
-    const AUTH_KEYS = {
-      IS_AUTHENTICATED: 'crowdpulse_is_authenticated',
-      REMEMBER_ME: 'crowdpulse_remember_me',
-      REMEMBERED_EMAIL: 'crowdpulse_remembered_email',
-      ACCOUNTS: 'crowdpulse_accounts',
-    };
+    /* Hide sign-in/sign-up CTAs when user is already authenticated */
+    (function updateHomeForAuthState() {
+      var isAuth = localStorage.getItem('crowdpulse_is_authenticated') === 'true';
+      if (!isAuth) return;
 
-    /* ── Account registry helpers ── */
-    function getAccounts() {
-      try { return JSON.parse(localStorage.getItem(AUTH_KEYS.ACCOUNTS) || '{}'); }
-      catch(e) { return {}; }
-    }
-    function saveAccounts(accounts) {
-      localStorage.setItem(AUTH_KEYS.ACCOUNTS, JSON.stringify(accounts));
-    }
+      /* Hero: hide signup button, keep 'Explore Features' */
+      var heroBtn = document.getElementById('heroSignupBtn');
+      if (heroBtn) heroBtn.style.display = 'none';
 
-    /* ── If already authenticated, skip the auth page entirely ── */
-    (function maybeAutoRedirect() {
-      const isAuth = localStorage.getItem(AUTH_KEYS.IS_AUTHENTICATED) === 'true';
-      if (isAuth) { window.location.replace('home.html'); }
+      /* Bottom CTA: swap buttons for a 'My Profile' link */
+      var ctaRow = document.getElementById('ctaRow');
+      var ctaSubtitle = document.getElementById('ctaSubtitle');
+      var ctaTitle = document.getElementById('ctaTitle');
+
+      if (ctaTitle) ctaTitle.innerHTML = 'Welcome back to <span class="gtext">CrowdPulse!</span>';
+      if (ctaSubtitle) ctaSubtitle.textContent = 'You are signed in. Jump straight into any feature below.';
+      if (ctaRow) {
+        ctaRow.innerHTML =
+          '<a href="profile.html" class="btn-p">My Profile →</a>' +
+          '<a href="#features" class="btn-s">Explore Features</a>';
+      }
     }());
-
-    // Check URL param for initial tab
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('mode') === 'signup') switchAuth('signup');
-
-    function switchAuth(mode) {
-      const si = document.getElementById('signinSection');
-      const su = document.getElementById('signupSection');
-      const siTab = document.getElementById('signinTab');
-      const suTab = document.getElementById('signupTab');
-      clearFieldError('si-email-err');
-      clearFieldError('si-pass-err');
-      if (mode === 'signup') {
-        si.classList.add('hidden'); su.classList.remove('hidden');
-        siTab.classList.remove('active'); suTab.classList.add('active');
-      } else {
-        su.classList.add('hidden'); si.classList.remove('hidden');
-        suTab.classList.remove('active'); siTab.classList.add('active');
-      }
-    }
-
-    function showToast(msg, isError) {
-      const t = document.getElementById('authToast');
-      t.textContent = msg;
-      t.style.background = isError
-        ? 'rgba(239,68,68,0.18)'
-        : 'rgba(34,197,94,0.15)';
-      t.style.borderColor = isError
-        ? 'rgba(239,68,68,0.38)'
-        : 'rgba(34,197,94,0.3)';
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 4000);
-    }
-
-    function setFieldError(id, msg) {
-      const el = document.getElementById(id);
-      if (el) { el.textContent = msg; el.style.display = 'block'; }
-    }
-    function clearFieldError(id) {
-      const el = document.getElementById(id);
-      if (el) { el.textContent = ''; el.style.display = 'none'; }
-    }
-
-    function redirectToHome() {
-      window.location.replace('home.html');
-      setTimeout(() => { window.location.href = 'home.html'; }, 250);
-    }
-
-    /* ── Sign In ── */
-    function handleSignIn(e) {
-      e.preventDefault();
-      clearFieldError('si-email-err');
-      clearFieldError('si-pass-err');
-
-      const emailInput    = document.getElementById('si-email');
-      const passInput     = document.getElementById('si-password');
-      const rememberInput = document.getElementById('si-remember');
-      const email         = (emailInput?.value || '').trim().toLowerCase();
-      const password      = passInput?.value || '';
-      const rememberMe    = !!rememberInput?.checked;
-      const btn           = document.getElementById('si-btn');
-
-      const accounts = getAccounts();
-
-      /* Check if account exists */
-      if (!accounts[email]) {
-        setFieldError('si-email-err', '⚠️ No account found. Please sign up first.');
-        showToast('❌ No account found — please sign up first.', true);
-        return;
-      }
-
-      /* Check password */
-      if (accounts[email].password !== password) {
-        setFieldError('si-pass-err', '⚠️ Incorrect password.');
-        showToast('❌ Incorrect password. Please try again.', true);
-        return;
-      }
-
-      btn.textContent = 'Signing in…'; btn.disabled = true;
-      setTimeout(() => {
-        const user = accounts[email];
-        localStorage.setItem(AUTH_KEYS.IS_AUTHENTICATED, 'true');
-        localStorage.setItem(AUTH_KEYS.REMEMBERED_EMAIL, email);
-        if (user.name) localStorage.setItem('crowdpulse_user_name', user.name);
-        if (rememberMe) {
-          localStorage.setItem(AUTH_KEYS.REMEMBER_ME, 'true');
-        } else {
-          localStorage.setItem(AUTH_KEYS.REMEMBER_ME, 'false');
-        }
-        if (!localStorage.getItem('crowdpulse_member_since')) {
-          localStorage.setItem('crowdpulse_member_since', user.since || new Date().toISOString());
-        }
-        btn.textContent = '✓ Welcome back!';
-        btn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
-        showToast('🎉 Signed in successfully! Redirecting…');
-        setTimeout(redirectToHome, 1400);
-      }, 900);
-    }
-
-    /* ── Sign Up ── */
-    function handleSignUp(e) {
-      e.preventDefault();
-      const pw    = document.getElementById('su-password').value;
-      const cf    = document.getElementById('su-confirm').value;
-
-      if (pw !== cf) {
-        showToast('❌ Passwords do not match.', true);
-        return;
-      }
-      if (pw.length < 8) {
-        showToast('❌ Password must be at least 8 characters.', true);
-        return;
-      }
-
-      const nameInput  = document.getElementById('su-name');
-      const emailInput = document.getElementById('su-email');
-      const name       = (nameInput?.value || '').trim();
-      const email      = (emailInput?.value || '').trim().toLowerCase();
-      const btn        = document.getElementById('su-btn');
-
-      const accounts = getAccounts();
-      if (accounts[email]) {
-        showToast('⚠️ An account with this email already exists. Please sign in.', true);
-        setTimeout(() => switchAuth('signin'), 1500);
-        return;
-      }
-
-      btn.textContent = 'Creating account…'; btn.disabled = true;
-      setTimeout(() => {
-        const since = new Date().toISOString();
-        accounts[email] = { name, email, password: pw, since };
-        saveAccounts(accounts);
-
-        localStorage.setItem(AUTH_KEYS.IS_AUTHENTICATED, 'true');
-        if (name) localStorage.setItem('crowdpulse_user_name', name);
-        localStorage.setItem(AUTH_KEYS.REMEMBER_ME, 'true');
-        localStorage.setItem(AUTH_KEYS.REMEMBERED_EMAIL, email);
-        localStorage.setItem('crowdpulse_member_since', since);
-
-        btn.textContent = '✓ Account created!';
-        btn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
-        showToast('🎉 Account created! Welcome to CrowdPulse!');
-        setTimeout(redirectToHome, 1500);
-      }, 1100);
-    }
-
-    /* ── Social Login (registers & signs in) ── */
-    function socialLogin(btn, provider) {
-      btn.textContent = 'Connecting…';
-      setTimeout(() => {
-        const demoEmail = provider.toLowerCase() + '_user@crowdpulse.demo';
-        const demoName  = provider + ' User';
-        const accounts  = getAccounts();
-        if (!accounts[demoEmail]) {
-          accounts[demoEmail] = { name: demoName, email: demoEmail, password: '', since: new Date().toISOString() };
-          saveAccounts(accounts);
-        }
-        localStorage.setItem(AUTH_KEYS.IS_AUTHENTICATED, 'true');
-        localStorage.setItem(AUTH_KEYS.REMEMBERED_EMAIL, demoEmail);
-        localStorage.setItem('crowdpulse_user_name', accounts[demoEmail].name);
-        localStorage.setItem(AUTH_KEYS.REMEMBER_ME, 'true');
-        localStorage.setItem('crowdpulse_member_since', accounts[demoEmail].since);
-        btn.textContent = '✓ Connected!';
-        showToast('🎉 Signed in with ' + provider + '!');
-        setTimeout(redirectToHome, 1200);
-      }, 1200);
-    }
-
-    function togglePasswordVisibility(inputId, btnEl) {
-      const input = document.getElementById(inputId);
-      const isPassword = input.type === 'password';
-      input.type = isPassword ? 'text' : 'password';
-      btnEl.title = isPassword ? 'Hide password' : 'Show password';
-      
-      if (isPassword) {
-        btnEl.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
-      } else {
-        btnEl.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
-      }
-    }
-
-    function hydrateRememberedCredentials() {
-      const rememberedEmail = localStorage.getItem(AUTH_KEYS.REMEMBERED_EMAIL) || '';
-      const emailInput      = document.getElementById('si-email');
-      const rememberInput   = document.getElementById('si-remember');
-      const remember        = localStorage.getItem(AUTH_KEYS.REMEMBER_ME) === 'true';
-      if (rememberInput) rememberInput.checked = remember;
-      if (emailInput && remember && rememberedEmail) emailInput.value = rememberedEmail;
-    }
-
-    document.getElementById('signinForm')?.addEventListener('submit', handleSignIn);
-    document.getElementById('signupForm')?.addEventListener('submit', handleSignUp);
-    hydrateRememberedCredentials();
   </script>
 </body>
 </html>
