@@ -5,24 +5,24 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebas
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-// TODO: Replace this config with your actual Firebase Project keys from the Firebase Console!
-// Refer to the step-by-step guide provided for instructions.
-const firebaseConfig = {
-    apiKey: "AIzaSyC3-sdajkzX1q89z-sqnptBbWQ5DuusH0s",
-    authDomain: "crowdpulse-f2ff0.firebaseapp.com",
-    projectId: "crowdpulse-f2ff0",
-    storageBucket: "crowdpulse-f2ff0.firebasestorage.app",
-    messagingSenderId: "108417955219",
-    appId: "1:108417955219:web:67c4bea7f2fec5abaf6466"
-};
-
-// Initialize Firebase App
 let app, auth, db;
+
 try {
+    const response = await fetch('/api/config');
+    if (!response.ok) throw new Error("Failed to fetch Firebase config from backend.");
+    
+    const data = await response.json();
+    const firebaseConfig = data.firebaseConfig;
+
+    if (!firebaseConfig.apiKey) {
+        console.warn("[Firebase] Missing API Key from /api/config. Using fallback initialization.");
+    }
+
     app = initializeApp(firebaseConfig);
     auth = getAuth(app);
     db = getFirestore(app);
-    console.log("[Firebase] Successfully Initialized Official Core APIs.");
+    console.log("[Firebase] Successfully Initialized Official Core APIs via backend config.");
+    
 } catch (error) {
     console.error("[Firebase] Initialization Failed. Did you setup your API keys?", error);
 }

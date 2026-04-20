@@ -8,6 +8,9 @@ const express = require('express');
 const cors    = require('cors');
 const { v4: uuidv4 } = require('uuid');
 
+// Load environment variables from .env if present
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
 const app  = express();
 const PORT = process.env.PORT || 3001;
 const ROOT = path.join(__dirname, '../public');
@@ -86,6 +89,7 @@ app.get('/api/info', (req, res) => {
     version: '1.0.0',
     status: 'running',
     endpoints: {
+      'GET  /api/config'                 : 'Fetch frontend configuration settings',
       'GET  /api/incidents'              : 'Fetch all incidents (filterable)',
       'GET  /api/incidents/:id'          : 'Fetch single incident by ID',
       'POST /api/incidents'              : 'Report a new incident',
@@ -94,6 +98,23 @@ app.get('/api/info', (req, res) => {
       'DELETE /api/incidents/:id'        : 'Dismiss/delete an incident',
       'GET  /api/summary'                : 'Dashboard summary stats',
     },
+  });
+});
+
+// ─────────────────────────────────────────────────
+//  GET /api/config - Frontend environment variables
+// ─────────────────────────────────────────────────
+app.get('/api/config', (req, res) => {
+  res.json({
+    success: true,
+    firebaseConfig: {
+      apiKey: process.env.FIREBASE_API_KEY || "",
+      authDomain: process.env.FIREBASE_AUTH_DOMAIN || "",
+      projectId: process.env.FIREBASE_PROJECT_ID || "",
+      storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "",
+      messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "",
+      appId: process.env.FIREBASE_APP_ID || ""
+    }
   });
 });
 
