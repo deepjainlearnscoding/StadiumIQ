@@ -6,7 +6,7 @@ CrowdPulse is a **real-time crowd intelligence and stadium navigation platform**
 
 ## 🚀 Live Demo
 
-🔗 https://stadiumiq-224869760685.us-central1.run.app
+🔗 https://crowdpulse-lvg24pct4a-uc.a.run.app
 
 ---
 
