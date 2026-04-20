@@ -1,13 +1,9 @@
 node_modules
 server/node_modules
 npm-debug.log
-.env
-.env.*
 .DS_Store
 .git
 .gitignore
 README.md
-Dockerfile
-.dockerignore
 google-cloud-sdk/
 gcloud.zip
